@@ -31,16 +31,19 @@ export default function Ladder({ stages, ageYears, assets }: { stages: StageResu
       const m = STAGES[s];
       const reach = stages.reachMonths[s];
       const isCurrent = s === stages.stage;
-      const done = s < stages.stage;
-      const future = s > stages.stage;
+      // 달성 여부는 "현재 단계보다 아래인가"가 아니라 그 단계 자신의 조건으로 판단한다.
+      // 불씨처럼 나이·수익률에 따라 필요 금액이 달라지는 단계는 더 높은 단계보다 늦게 달성될 수 있다.
+      const achieved = reach === 0;
+      const done = achieved && !isCurrent;
+      const future = !achieved;
       const reachAge = reach !== null ? ageAfter(ageYears, reach) : null;
       const popId = `stage-pop-${s}`;
       // 올림해서 "이 비율 이상"이 정확하게 읽히도록 한다
       const ratio = stages.requiredRatio[s];
       const pct = `${Math.ceil(ratio * 100 - 1e-9)}%`;
       const need = requiredAmount(ratio, stages.targetAssets);
-      // 달성률: 지금 내 자산 ÷ 그 단계에 필요한 금액 (이미 넘은 단계는 100%)
-      const progress = s <= stages.stage || need === 0 ? 1 : Math.min(1, assets / need);
+      // 달성률: 지금 내 자산 ÷ 그 단계에 필요한 금액 (이미 달성한 단계는 100%)
+      const progress = achieved || need === 0 ? 1 : Math.min(1, assets / need);
       return <li key={s} className={`${isCurrent ? "current" : ""} ${future ? "future" : ""}`}>
         <div className="fl-rung">
           <FlameDrop stage={s} size={isCurrent ? 20 : 16} />

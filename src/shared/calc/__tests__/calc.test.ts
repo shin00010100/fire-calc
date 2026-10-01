@@ -63,6 +63,14 @@ describe("단계별 필요 비율", () => {
     expect(Math.ceil(requiredRatio(1, P) * 100)).toBe(14);
     expect(Math.ceil(requiredRatio(1, { ...P, annualReturn: 0.05 }) * 100)).toBe(24);
   });
+  it("보수형(3%)이면 불씨가 촛불보다 늦게 달성될 수 있다 — 단계별로 자기 조건으로 판단", () => {
+    const input = { ...P, annualReturn: 0.03, assets: 300_000_000 };
+    const s = calculateStages(input);
+    expect(s.stage).toBe(2);                                // 촛불(30%)은 달성
+    expect(s.requiredRatio[1]).toBeGreaterThan(s.requiredRatio[2]); // 불씨(≈41%)가 촛불(30%)보다 큼
+    expect(s.reachMonths[2]).toBe(0);
+    expect(s.reachMonths[1]).toBeGreaterThan(0);            // 불씨는 아직 → 달성 표시를 하면 안 된다
+  });
   it("60세 이상이거나 수익률 0이면 100%", () => {
     expect(requiredRatio(1, { ...P, age: 60 })).toBe(1);
     expect(requiredRatio(1, { ...P, annualReturn: 0 })).toBe(1);
