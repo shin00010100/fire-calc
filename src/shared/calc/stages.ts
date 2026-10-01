@@ -72,6 +72,9 @@ export function requiredRatio(s: StageIndex, input: FireInput): number {
   }
 }
 
+/** 필요 비율 × 목표 자산을 만원 단위로 올림한 금액. 비율이 0이면 0 */
+export const requiredAmount = (ratio: number, target: number) => (ratio > 0 ? Math.ceil((ratio * target) / 10_000 - 1e-6) * 10_000 : 0);
+
 export function calculateStages(input: FireInput): StageResult {
   const stage = determineStage(input);
   return {

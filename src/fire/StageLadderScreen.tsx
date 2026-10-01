@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { navigate, ROUTES } from "../routes";
 import { ageAfter } from "../shared/calc/fire";
+import { requiredAmount } from "../shared/calc/stages";
 import { STAGES } from "../shared/constants";
 import Disclaimer from "../shared/Disclaimer";
-import { age, eok, manwon, percent } from "../shared/format";
+import { age, eok, manwon } from "../shared/format";
 import BuildingFire from "./BuildingFire";
 import FuelCard from "./FuelCard";
 import Ladder from "./Ladder";
@@ -24,6 +25,9 @@ export default function StageLadderScreen() {
   if (!input || !stages) return null;
   const meta = STAGES[stages.stage];
   const next = stages.nextStage !== null ? STAGES[stages.nextStage] : null;
+  // 다음 단계 목표 금액: 현재 단계에서 바로 계산하므로 단계가 오르면 자동으로 다음 단계 금액으로 바뀐다
+  const nextRatio = stages.nextStage !== null ? stages.requiredRatio[stages.nextStage] : 0;
+  const nextNeed = requiredAmount(nextRatio, stages.targetAssets);
   // FIRE 달성 = 용광로(Full FIRE)에 닿는 시점
   const fireMonths = stages.reachMonths[5];
   const fireAge = fireMonths === null ? "100년 이후" : fireMonths === 0 ? "이미 달성" : (() => { const v = ageAfter(input.age, fireMonths); return age(v.years, v.months); })();
@@ -38,12 +42,8 @@ export default function StageLadderScreen() {
         <div><dt>현재 나이</dt><dd>만 {Math.floor(input.age)}세</dd></div>
         <div><dt>FIRE 달성 나이</dt><dd>{fireAge}</dd></div>
         <div><dt>총 저축 금액<button className="fl-edit" onClick={() => setEditing(true)} aria-label="총 저축 금액 수정">수정</button></dt><dd>{manwon(input.assets)}</dd></div>
-        <div><dt>FIRE 목표 금액</dt><dd>{eok(stages.targetAssets)}</dd></div>
+        <div><dt>다음 단계 목표 금액</dt><dd>{next ? eok(nextNeed) : "모든 단계 달성"}{next && <small>{next.fire} · {Math.ceil(nextRatio * 100 - 1e-9)}%</small>}</dd></div>
       </dl>
-      <div className="fl-progress">
-        <div className="fl-progress-head"><span>{next ? `${next.fire}까지` : "모든 불꽃을 피웠어요"}</span><strong>{percent(stages.progressToNext)}</strong></div>
-        <div className="fl-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.floor(stages.progressToNext * 100)} aria-label={next ? `${next.fire}까지 진행률` : "진행률"}><div style={{ width: `${stages.progressToNext * 100}%` }} /></div>
-      </div>
     </section>
 
     <FuelCard total={monthFuel.total} count={monthFuel.count} />

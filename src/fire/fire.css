@@ -45,6 +45,7 @@
 .fl-edit { padding: 2px 9px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px; color: #fff; background: transparent; font-size: 11.5px; cursor: pointer; }
 .fl-edit:active { background: rgba(255, 255, 255, .15); }
 .fl-stats dd { margin: 4px 0 0; color: #fff; font-size: 17px; font-weight: 700; }
+.fl-stats dd small { display: block; margin-top: 2px; color: #d6d3d1; font-size: 11.5px; font-weight: 500; }
 
 /* 이번 달 장작 */
 .fl-big { display: block; margin-top: 8px; font-size: 28px; letter-spacing: -.5px; }

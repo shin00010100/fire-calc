@@ -3,7 +3,7 @@ import { DEFAULT_INPUT } from "../../constants";
 import type { FireInput } from "../../types";
 import { ageAfter, calculateFire, simulate, targetAssets } from "../fire";
 import { calculateHeat } from "../heat";
-import { calculateStages, determineStage, requiredRatio, stageReachMonths } from "../stages";
+import { calculateStages, determineStage, requiredAmount, requiredRatio, stageReachMonths } from "../stages";
 import { currentFlameInput, fuelOfMonth, fuelTotal, monthsBetween, withTotalAssets } from "../current";
 
 const P: FireInput = { age: 30, assets: 50_000_000, monthlyInvest: 1_500_000, annualReturn: 0.07, monthlyExpense: 3_000_000, withdrawalRate: 0.04 };
@@ -66,6 +66,17 @@ describe("단계별 필요 비율", () => {
   it("60세 이상이거나 수익률 0이면 100%", () => {
     expect(requiredRatio(1, { ...P, age: 60 })).toBe(1);
     expect(requiredRatio(1, { ...P, annualReturn: 0 })).toBe(1);
+  });
+  it("필요 금액은 만원 단위로 올림, 비율 0이면 0", () => {
+    expect(requiredAmount(0.3, 900_000_000)).toBe(270_000_000);
+    expect(requiredAmount(1 / 1.05 ** 30, 900_000_000)).toBe(208_240_000);
+    expect(requiredAmount(0, 900_000_000)).toBe(0);
+  });
+  it("다음 단계가 오르면 목표 금액도 다음 단계 것으로 바뀐다", () => {
+    const at = (assets: number) => { const s = calculateStages({ ...P, assets }); return s.nextStage === null ? null : requiredAmount(s.requiredRatio[s.nextStage], s.targetAssets); };
+    expect(at(50_000_000)).toBe(requiredAmount(requiredRatio(1, P), 900_000_000)); // 성냥 → 다음은 불씨
+    expect(at(300_000_000)).toBe(540_000_000);   // 촛불 → 다음은 모닥불(60%)
+    expect(at(1_400_000_000)).toBeNull();        // 불꽃놀이 → 다음 없음
   });
   it("필요 비율을 채우면 해당 단계가 충족된다", () => {
     for (const s of [1, 2, 3, 4, 5, 6] as const) {

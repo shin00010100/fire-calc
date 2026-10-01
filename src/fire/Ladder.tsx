@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ageAfter } from "../shared/calc/fire";
+import { requiredAmount } from "../shared/calc/stages";
 import { BF_COL, STAGE_INDICES, STAGES } from "../shared/constants";
 import { age, eok, percent } from "../shared/format";
 import type { StageIndex, StageResult } from "../shared/types";
@@ -37,7 +38,7 @@ export default function Ladder({ stages, ageYears, assets }: { stages: StageResu
       // 올림해서 "이 비율 이상"이 정확하게 읽히도록 한다
       const ratio = stages.requiredRatio[s];
       const pct = `${Math.ceil(ratio * 100 - 1e-9)}%`;
-      const need = ratio > 0 ? Math.ceil((ratio * stages.targetAssets) / 10_000 - 1e-6) * 10_000 : 0;
+      const need = requiredAmount(ratio, stages.targetAssets);
       // 달성률: 지금 내 자산 ÷ 그 단계에 필요한 금액 (이미 넘은 단계는 100%)
       const progress = s <= stages.stage || need === 0 ? 1 : Math.min(1, assets / need);
       return <li key={s} className={`${isCurrent ? "current" : ""} ${future ? "future" : ""}`}>
