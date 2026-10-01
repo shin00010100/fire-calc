@@ -10,6 +10,7 @@ interface FlameStateValue {
   saveInput: (input: FireInput) => Promise<void>;
   addFuelLog: (ym: string, amount: number) => Promise<{ prevStage: StageIndex; newStage: StageIndex }>;
   setLastSeenStage: (s: StageIndex) => Promise<void>;
+  setTotalAssets: (total: number) => Promise<void>;
 }
 
 const Ctx = createContext<FlameStateValue | null>(null);
@@ -29,6 +30,7 @@ export function FlameStateProvider({ children }: { children: ReactNode }) {
     saveInput: async (input) => sync(await storage.saveInput(input)),
     addFuelLog: async (ym, amount) => { const r = await storage.addFuelLog(ym, amount); sync(r.state); return { prevStage: r.prevStage, newStage: r.newStage }; },
     setLastSeenStage: async (s) => sync(await storage.setLastSeenStage(s)),
+    setTotalAssets: async (total) => sync(await storage.setTotalAssets(total)),
   }), [state, ready, persistFailed, sync]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

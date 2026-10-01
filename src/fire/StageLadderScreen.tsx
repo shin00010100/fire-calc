@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { navigate, ROUTES } from "../routes";
+import { ageAfter } from "../shared/calc/fire";
 import { STAGES } from "../shared/constants";
 import Disclaimer from "../shared/Disclaimer";
-import { eok, manwon, percent } from "../shared/format";
+import { age, eok, manwon, percent } from "../shared/format";
 import BuildingFire from "./BuildingFire";
 import FuelCard from "./FuelCard";
 import Ladder from "./Ladder";
+import TotalAssetsSheet from "./TotalAssetsSheet";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
 export default function StageLadderScreen() {
-  const { ready, state, input, stages, monthFuel } = useFlameState();
+  const { ready, state, input, stages, monthFuel, setTotalAssets } = useFlameState();
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     if (!ready) return;
@@ -21,12 +24,9 @@ export default function StageLadderScreen() {
   if (!input || !stages) return null;
   const meta = STAGES[stages.stage];
   const next = stages.nextStage !== null ? STAGES[stages.nextStage] : null;
-  const stats = [
-    { label: "총 저축 금액", value: manwon(input.assets) },
-    { label: "시작 금액", value: manwon(state.input?.assets ?? input.assets) },
-    { label: "목표 금액", value: eok(stages.targetAssets) },
-    { label: "현재 나이", value: `만 ${Math.floor(input.age)}세` },
-  ];
+  // FIRE 달성 = 용광로(Full FIRE)에 닿는 시점
+  const fireMonths = stages.reachMonths[5];
+  const fireAge = fireMonths === null ? "100년 이후" : fireMonths === 0 ? "이미 달성" : (() => { const v = ageAfter(input.age, fireMonths); return age(v.years, v.months); })();
 
   return <main className="fl-screen">
     <section className="fl-hero">
@@ -35,7 +35,10 @@ export default function StageLadderScreen() {
       <h1>{meta.fireStage}</h1>
       <p className="fl-summary">{meta.summary}</p>
       <dl className="fl-stats">
-        {stats.map((s) => <div key={s.label}><dt>{s.label}</dt><dd>{s.value}</dd></div>)}
+        <div><dt>현재 나이</dt><dd>만 {Math.floor(input.age)}세</dd></div>
+        <div><dt>FIRE 달성 나이</dt><dd>{fireAge}</dd></div>
+        <div><dt>총 저축 금액<button className="fl-edit" onClick={() => setEditing(true)} aria-label="총 저축 금액 수정">수정</button></dt><dd>{manwon(input.assets)}</dd></div>
+        <div><dt>FIRE 목표 금액</dt><dd>{eok(stages.targetAssets)}</dd></div>
       </dl>
       <div className="fl-progress">
         <div className="fl-progress-head"><span>{next ? `${next.fire}까지` : "모든 불꽃을 피웠어요"}</span><strong>{percent(stages.progressToNext)}</strong></div>
@@ -48,7 +51,8 @@ export default function StageLadderScreen() {
     <section className="fl-card">
       <h2>파이어 단계</h2>
       <p className="fl-sub">i를 누르면 단계의 정확한 의미를 볼 수 있어요</p>
-      <Ladder stages={stages} ageYears={input.age} />
+      <p className="fl-sub tight">이름 옆 %는 그 단계에 필요한 목표 자산 비율이고, 달성률은 지금 내 자산이 그 단계 금액의 몇 %인지예요.</p>
+      <Ladder stages={stages} ageYears={input.age} assets={input.assets} />
     </section>
 
     <section className="fl-card">
@@ -57,5 +61,7 @@ export default function StageLadderScreen() {
       <button className="fl-btn" onClick={() => navigate(ROUTES.experiment)}>실험하러 가기</button>
     </section>
     <Disclaimer />
+
+    {editing && <TotalAssetsSheet current={input.assets} onSave={setTotalAssets} onClose={() => setEditing(false)} />}
   </main>;
 }

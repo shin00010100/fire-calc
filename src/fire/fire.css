@@ -5,6 +5,7 @@
 }
 .fl-screen h2 { margin: 0; font-size: 18px; }
 .fl-sub { margin: 4px 0 14px; color: var(--sub); font-size: 13px; }
+.fl-sub.tight { margin: -8px 0 12px; color: var(--hint); font-size: 12px; line-height: 1.5; }
 .fl-label { color: var(--flame); font-size: 13px; font-weight: 700; }
 .fl-note { margin: 8px 0 0; color: var(--sub); font-size: 13px; }
 .fl-error { margin: 8px 0 0; color: #dc2626; font-size: 13px; }
@@ -40,7 +41,9 @@
 /* 히어로 요약 수치 */
 .fl-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 0; }
 .fl-stats div { padding: 12px; border-radius: 12px; background: rgba(255, 255, 255, .08); text-align: left; }
-.fl-stats dt { color: #d6d3d1; font-size: 12px; }
+.fl-stats dt { display: flex; align-items: center; justify-content: space-between; min-height: 22px; color: #d6d3d1; font-size: 12px; }
+.fl-edit { padding: 2px 9px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px; color: #fff; background: transparent; font-size: 11.5px; cursor: pointer; }
+.fl-edit:active { background: rgba(255, 255, 255, .15); }
 .fl-stats dd { margin: 4px 0 0; color: #fff; font-size: 17px; font-weight: 700; }
 
 /* 이번 달 장작 */
@@ -51,13 +54,18 @@
 .fl-ladder { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .fl-ladder li { position: relative; }
 .fl-rung { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 8px 8px 14px; border: 2px solid transparent; border-radius: 14px; }
-.fl-ladder li.future .fl-rung > :not(.fl-info) { opacity: .55; }
+.fl-ladder li.future .fl-rung > :not(.fl-info) { opacity: .6; }
 .fl-ladder li.current .fl-rung { border-color: var(--flame); background: var(--flame-soft); }
 .fl-rung-text { flex: 1; min-width: 0; }
 .fl-rung-text strong { display: block; font-size: 15px; }
-.fl-pct { margin-left: 6px; padding: 1px 7px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 11.5px; font-style: normal; font-weight: 700; vertical-align: 1px; }
+.fl-pct { margin-left: 6px; white-space: nowrap; padding: 1px 7px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 11.5px; font-style: normal; font-weight: 700; vertical-align: 1px; }
 .fl-rung-text span { color: var(--sub); font-size: 12.5px; }
+.fl-rung-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
 .fl-rung em { color: var(--sub); font-size: 13px; font-style: normal; white-space: nowrap; }
+.fl-rung-right small { color: var(--hint); font-size: 11.5px; white-space: nowrap; }
+.fl-ladder li.current .fl-rung-right small { color: var(--flame); }
+.fl-rung-bar { height: 4px; margin: -2px 54px 8px 44px; overflow: hidden; border-radius: 2px; background: #f3ece5; }
+.fl-rung-bar div { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ea580c, #fbbf24); }
 .fl-ladder li.current em { color: var(--flame); font-weight: 700; }
 .fl-drop { display: inline-block; flex-shrink: 0; margin: 0 2px; border-radius: 50% 0 50% 50%; transform: rotate(-45deg); }
 /* 24px 원 + 터치 영역 44px */
@@ -163,6 +171,8 @@
 .fl-sheet-backdrop { position: fixed; z-index: 40; inset: 0; display: flex; align-items: flex-end; justify-content: center; background: rgba(28, 25, 23, .45); }
 .fl-sheet { width: 100%; max-width: 480px; padding: 24px 24px calc(20px + env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0; background: #fff; }
 .fl-sheet h2 { font-size: 19px; }
+.fl-sheet .fl-box { margin-top: 12px; background: #f5f0eb; }
+.fl-sheet .fl-note, .fl-sheet .fl-error { margin-top: 8px; }
 .fl-sheet p { margin: 8px 0 4px; color: var(--sub); }
 .fl-sheet-list { margin: 10px 0 0; padding: 0; list-style: none; color: var(--text); font-size: 14px; line-height: 1.7; }
 .fl-sheet-list b { font-weight: 700; }

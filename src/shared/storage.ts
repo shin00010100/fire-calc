@@ -1,5 +1,5 @@
 import { Storage as AitStorage } from "@apps-in-toss/web-framework";
-import { currentFlameInput } from "./calc/current";
+import { currentFlameInput, withTotalAssets } from "./calc/current";
 import { determineStage } from "./calc/stages";
 import { ymKey } from "./format";
 import { emptyState, migrateState } from "./migrate";
@@ -112,6 +112,12 @@ export async function addFuelLog(ym: string, amount: number): Promise<{ prevStag
   const logs = [...state.logs, { ym, amount, recordedAt: now.toISOString() }];
   const next = await write({ ...state, logs });
   return { prevStage, newStage: flameStage(next, now), state: next };
+}
+
+/** 총 저축 금액 수정. 직접 고친 값이라 단계가 바뀌어도 축하 화면은 띄우지 않는다 */
+export async function setTotalAssets(total: number): Promise<FlameState> {
+  const next = withTotalAssets(await loadState(), total);
+  return write({ ...next, lastSeenStage: flameStage(next, new Date()) });
 }
 
 export async function setLastSeenStage(s: StageIndex): Promise<FlameState> {

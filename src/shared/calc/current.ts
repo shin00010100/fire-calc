@@ -28,3 +28,15 @@ export function currentFlameInput(state: FlameState, nowYm: string): FireInput |
   const elapsed = monthsBetween(isoToYm(state.createdAt), nowYm);
   return { ...state.input, assets: state.input.assets + fuelTotal(state), age: state.input.age + elapsed / 12 };
 }
+
+/**
+ * 총 저축 금액을 직접 맞춘다. 장작 기록은 그대로 두고 시작 금액만 조정(총액 = 시작 금액 + 장작 합계).
+ * 입력한 총액이 장작 합계보다 작으면 기록을 비우고 총액을 시작 금액으로 삼는다.
+ */
+export function withTotalAssets(state: FlameState, total: number): FlameState {
+  if (!state.input) return state;
+  const fuel = fuelTotal(state);
+  return total >= fuel
+    ? { ...state, input: { ...state.input, assets: total - fuel } }
+    : { ...state, input: { ...state.input, assets: total }, logs: [] };
+}

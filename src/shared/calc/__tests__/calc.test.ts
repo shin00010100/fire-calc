@@ -4,7 +4,7 @@ import type { FireInput } from "../../types";
 import { ageAfter, calculateFire, simulate, targetAssets } from "../fire";
 import { calculateHeat } from "../heat";
 import { calculateStages, determineStage, requiredRatio, stageReachMonths } from "../stages";
-import { currentFlameInput, fuelOfMonth, fuelTotal, monthsBetween } from "../current";
+import { currentFlameInput, fuelOfMonth, fuelTotal, monthsBetween, withTotalAssets } from "../current";
 
 const P: FireInput = { age: 30, assets: 50_000_000, monthlyInvest: 1_500_000, annualReturn: 0.07, monthlyExpense: 3_000_000, withdrawalRate: 0.04 };
 const reachList = (input: FireInput) => { const r = stageReachMonths(input); return [r[1], r[2], r[3], r[4], r[5], r[6]]; };
@@ -128,4 +128,15 @@ describe("불꽃 화면 입력 (장작 여러 번)", () => {
     expect(fuelOfMonth(state, "2026-07")).toEqual({ total: 0, count: 0 });
   });
   it("입력이 없으면 null", () => expect(currentFlameInput({ ...state, input: null }, "2026-07")).toBeNull());
+  it("총 저축 금액 수정: 장작 기록은 두고 시작 금액만 조정", () => {
+    const next = withTotalAssets(state, 70_000_000);
+    expect(next.logs).toHaveLength(3);
+    expect(next.input?.assets).toBe(62_000_000);
+    expect(currentFlameInput(next, "2026-07")?.assets).toBe(70_000_000);
+  });
+  it("총액이 장작 합계보다 작으면 기록을 비우고 총액을 시작 금액으로", () => {
+    const next = withTotalAssets(state, 5_000_000);
+    expect(next.logs).toEqual([]);
+    expect(currentFlameInput(next, "2026-07")?.assets).toBe(5_000_000);
+  });
 });
