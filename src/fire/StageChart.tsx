@@ -8,7 +8,6 @@ import { ageTickStep, amountLabel, amountTicks, spreadLabels } from "./chartMath
 
 type Reach = Record<StageIndex, number | null>;
 const ROWS: StageIndex[] = [1, 2, 3, 4, 5, 6];       // 불씨~불꽃놀이
-const LINE_STAGES: StageIndex[] = [2, 3, 4, 5, 6];   // 금액 기준선이 있는 단계 (불씨는 60세 조건이라 선 대신 점으로만)
 const A_COLOR = "#2563eb", B_COLOR = "#ea580c";
 const W = 320, H = 276, L = 46, R = 252, TOP = 14, BOT = 238;
 
@@ -53,9 +52,9 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
   };
 
   // 단계 기준선: A 기준은 라벨 포함, B의 목표 자산이 다르면(생활비를 바꾼 경우) B 기준선도 옅게 따로 그린다
-  const lines = LINE_STAGES.map((s) => ({ s, v: requiredRatio(s, a) * T }));
+  const lines = ROWS.map((s) => ({ s, v: requiredRatio(s) * T }));
   const labelY = spreadLabels(lines.map((l) => y(l.v)), 12.5, TOP + 4, BOT - 2);
-  const bLines = b && Math.abs(TB - T) > 1 ? LINE_STAGES.map((s) => ({ s, v: requiredRatio(s, b) * TB })) : [];
+  const bLines = b && Math.abs(TB - T) > 1 ? ROWS.map((s) => ({ s, v: requiredRatio(s) * TB })) : [];
 
   const spanYears = n / 12;
   const step = ageTickStep(spanYears);
@@ -124,7 +123,7 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
     <p className="sc-tip" aria-live="polite">
       {hover !== null && hoverAge ? <><b>{age(hoverAge.years, hoverAge.months)}</b> · A <b className="a">{manwon(sa[hover])}</b>{sb && <> · B <b className="b">{manwon(sb[hover])}</b></>}</> : "그래프를 누르면 나이별 예상 금액을 보여줘요"}
     </p>
-    <p className="sc-note">원 안의 숫자는 단계예요. 곡선이 해당 단계의 금액선에 닿는 지점이 그 불꽃이 켜지는 때예요. 1 불씨는 "지금 자산이 60세에 목표에 닿는 지점"이라 따로 선이 없어요. 왼쪽 끝은 지금(만 {Math.floor(a.age)}세)이에요.</p>
+    <p className="sc-note">원 안의 숫자는 단계예요. 곡선이 해당 단계의 금액선에 닿는 지점이 그 불꽃이 켜지는 때예요. 왼쪽 끝은 지금(만 {Math.floor(a.age)}세)이에요.</p>
 
     <table className="sc-table">
       <caption>단계별 도달 나이 (정확한 값)</caption>

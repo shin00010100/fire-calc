@@ -17,7 +17,7 @@ export interface StageResult {
   progressToNext: number;            // 0~1
   targetAssets: number;              // T
   coverage: number;                  // 충당률
-  requiredRatio: Record<StageIndex, number>; // 각 단계에 닿는 데 필요한 자산 ÷ 목표 자산 (불씨는 나이·수익률에 따라 달라짐)
+  requiredRatio: Record<StageIndex, number>; // 각 단계에 닿는 데 필요한 자산 ÷ 목표 자산 (모든 단계 고정 비율)
 }
 
 export interface FireResult {

@@ -27,13 +27,13 @@ describe("30세 페르소나 (§6.8)", () => {
     expect(s.stage).toBe(0);
     expect(s.nextStage).toBe(1);
     expect(s.coverage).toBeCloseTo(0.0556, 4);
-    expect(s.progressToNext).toBeCloseTo(0.4228, 3);
-    expect(Math.floor(s.progressToNext * 100)).toBe(42);
+    expect(s.progressToNext).toBeCloseTo(5 / 9, 6);   // 5,000만 ÷ 불씨 필요 9,000만
+    expect(Math.floor(s.progressToNext * 100)).toBe(55);
   });
 
   it("단계 도달 개월", () => {
-    expect(reachList(P)).toEqual([53, 94, 167, 186, 232, 290]);
-    expect(ageAfter(30, 53)).toEqual({ years: 34, months: 5 });
+    expect(reachList(P)).toEqual([22, 94, 167, 186, 232, 290]);
+    expect(ageAfter(30, 22)).toEqual({ years: 31, months: 10 });
     expect(ageAfter(30, 290)).toEqual({ years: 54, months: 2 });
   });
 
@@ -53,55 +53,60 @@ describe("30세 페르소나 (§6.8)", () => {
   });
 });
 
-describe("단계별 필요 비율", () => {
-  it("고정 비율 단계", () => {
+describe("단계별 필요 비율 (모두 목표 자산 대비 고정 비율)", () => {
+  it("불씨 10% · 촛불 30% · 모닥불 60% · 벽난로 70% · 용광로 100% · 불꽃놀이 150%", () => {
     const r = calculateStages(P).requiredRatio;
-    expect([r[0], r[2], r[3], r[4], r[5], r[6]]).toEqual([0, 0.3, 0.6, 0.7, 1, 1.5]);
+    expect([r[0], r[1], r[2], r[3], r[4], r[5], r[6]]).toEqual([0, 0.1, 0.3, 0.6, 0.7, 1, 1.5]);
   });
-  it("불씨는 60세까지의 성장 배수의 역수 (30세, 7% → 약 13%)", () => {
-    expect(requiredRatio(1, P)).toBeCloseTo(1 / Math.pow(1.07, 30), 10);
-    expect(Math.ceil(requiredRatio(1, P) * 100)).toBe(14);
-    expect(Math.ceil(requiredRatio(1, { ...P, annualReturn: 0.05 }) * 100)).toBe(24);
+  it("나이·수익률·자산이 달라도 필요 비율은 같다", () => {
+    for (const input of [P, { ...P, age: 55, annualReturn: 0.03 }, { ...P, assets: 1 }]) {
+      expect(calculateStages(input).requiredRatio).toEqual(calculateStages(P).requiredRatio);
+    }
   });
-  it("보수형(3%)이면 불씨가 촛불보다 늦게 달성될 수 있다 — 단계별로 자기 조건으로 판단", () => {
-    const input = { ...P, annualReturn: 0.03, assets: 300_000_000 };
-    const s = calculateStages(input);
-    expect(s.stage).toBe(2);                                // 촛불(30%)은 달성
-    expect(s.requiredRatio[1]).toBeGreaterThan(s.requiredRatio[2]); // 불씨(≈41%)가 촛불(30%)보다 큼
-    expect(s.reachMonths[2]).toBe(0);
-    expect(s.reachMonths[1]).toBeGreaterThan(0);            // 불씨는 아직 → 달성 표시를 하면 안 된다
-  });
-  it("60세 이상이거나 수익률 0이면 100%", () => {
-    expect(requiredRatio(1, { ...P, age: 60 })).toBe(1);
-    expect(requiredRatio(1, { ...P, annualReturn: 0 })).toBe(1);
+  it("단계 도달 시점은 투자성향·나이와 상관없이 항상 단계 순서대로 늘어난다", () => {
+    for (const annualReturn of [0.03, 0.05, 0.07]) for (const age of [20, 30, 45, 59]) {
+      const r = stageReachMonths({ ...P, annualReturn, age });
+      const list = [r[1], r[2], r[3], r[4], r[5], r[6]];
+      expect(list.every((m) => m !== null)).toBe(true);
+      expect(list).toEqual([...list].sort((x, y) => x! - y!));
+    }
   });
   it("필요 금액은 만원 단위로 올림, 비율 0이면 0", () => {
+    expect(requiredAmount(0.1, 900_000_000)).toBe(90_000_000);
     expect(requiredAmount(0.3, 900_000_000)).toBe(270_000_000);
-    expect(requiredAmount(1 / 1.05 ** 30, 900_000_000)).toBe(208_240_000);
     expect(requiredAmount(0, 900_000_000)).toBe(0);
   });
   it("다음 단계가 오르면 목표 금액도 다음 단계 것으로 바뀐다", () => {
     const at = (assets: number) => { const s = calculateStages({ ...P, assets }); return s.nextStage === null ? null : requiredAmount(s.requiredRatio[s.nextStage], s.targetAssets); };
-    expect(at(50_000_000)).toBe(requiredAmount(requiredRatio(1, P), 900_000_000)); // 성냥 → 다음은 불씨
-    expect(at(300_000_000)).toBe(540_000_000);   // 촛불 → 다음은 모닥불(60%)
-    expect(at(1_400_000_000)).toBeNull();        // 불꽃놀이 → 다음 없음
+    expect(at(50_000_000)).toBe(90_000_000);      // 성냥 → 다음은 불씨(10%)
+    expect(at(100_000_000)).toBe(270_000_000);    // 불씨 → 다음은 촛불(30%)
+    expect(at(300_000_000)).toBe(540_000_000);    // 촛불 → 다음은 모닥불(60%)
+    expect(at(1_400_000_000)).toBeNull();         // 불꽃놀이 → 다음 없음
   });
-  it("필요 비율을 채우면 해당 단계가 충족된다", () => {
+  it("필요 금액을 채우면 해당 단계가 충족되고, 모자라면 아니다", () => {
     for (const s of [1, 2, 3, 4, 5, 6] as const) {
-      expect(determineStage({ ...P, assets: requiredRatio(s, P) * 900_000_000 + 1 })).toBeGreaterThanOrEqual(s);
+      expect(determineStage({ ...P, assets: requiredRatio(s) * 900_000_000 + 1 })).toBeGreaterThanOrEqual(s);
+      expect(determineStage({ ...P, assets: requiredRatio(s) * 900_000_000 - 1 })).toBeLessThan(s);
     }
+  });
+  it("달성 여부는 reachMonths === 0 으로 단계마다 판단 (아래 단계는 항상 먼저 달성)", () => {
+    const s = calculateStages({ ...P, annualReturn: 0.03, assets: 300_000_000 });
+    expect(s.stage).toBe(2);
+    expect(s.reachMonths[1]).toBe(0);
+    expect(s.reachMonths[2]).toBe(0);
+    expect(s.reachMonths[3]).toBeGreaterThan(0);
   });
 });
 
 describe("B: 장작 +50만", () => {
   const B = { ...P, monthlyInvest: 2_000_000 };
-  it("단계 도달 개월", () => expect(reachList(B)).toEqual([39, 78, 141, 158, 201, 256]));
+  it("단계 도달 개월", () => expect(reachList(B)).toEqual([17, 78, 141, 158, 201, 256]));
   it("용광로 31개월 빠름", () => expect(stageReachMonths(P)[5]! - stageReachMonths(B)[5]!).toBe(31));
 });
 
 describe("회귀 케이스", () => {
-  it("수익률 6%", () => { const r = stageReachMonths({ ...P, annualReturn: 0.06 }); expect([r[5], r[1]]).toEqual([251, 88]); });
-  it("생활비 250만", () => { const r = stageReachMonths({ ...P, monthlyExpense: 2_500_000 }); expect([r[5], r[1]]).toEqual([208, 36]); });
+  it("수익률 6%", () => { const r = stageReachMonths({ ...P, annualReturn: 0.06 }); expect([r[5], r[1]]).toEqual([251, 22]); });
+  it("생활비 250만", () => { const r = stageReachMonths({ ...P, monthlyExpense: 2_500_000 }); expect([r[5], r[1]]).toEqual([208, 14]); });
 });
 
 describe("예외", () => {
@@ -120,9 +125,8 @@ describe("예외", () => {
     expect(() => calculateFire({ ...P, withdrawalRate: 0 })).toThrow();
     expect(() => calculateFire({ ...P, monthlyExpense: 0 })).toThrow();
   });
-  it("판정은 높은 단계부터 (Coast 미충족이어도 모닥불)", () => {
-    // 59세: 60세까지 1년뿐이라 Coast는 어렵지만 충당률 0.65
-    expect(determineStage({ ...P, age: 59, assets: 0.65 * 900_000_000 })).toBe(3);
+  it("판정은 높은 단계부터 (충당률 0.65 → 모닥불)", () => {
+    expect(determineStage({ ...P, assets: 0.65 * 900_000_000 })).toBe(3);
   });
 });
 
