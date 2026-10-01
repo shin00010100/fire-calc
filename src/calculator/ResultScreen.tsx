@@ -7,19 +7,15 @@ import { age, duration, eok, ym } from "../shared/format";
 import AssetChart from "./AssetChart";
 import "./calculator.css";
 
-const BOOST = 500_000;
-
 export default function ResultScreen() {
   const { state } = useFlameStore();
   const input = state.input;
   useEffect(() => { if (!input) navigate(ROUTES.input, { replace: true }); }, [input]);
   const result = useMemo(() => (input ? calculateFire(input) : null), [input]);
-  const boosted = useMemo(() => (input ? calculateFire({ ...input, monthlyInvest: input.monthlyInvest + BOOST }) : null), [input]);
-  if (!input || !result || !boosted) return null;
+  if (!input || !result) return null;
 
   const m = result.monthsToFire;
   const already = m === 0;
-  const saved = m !== null && boosted.monthsToFire !== null ? m - boosted.monthsToFire : null;
 
   return <main className="calc-screen">
     <h1 className="calc-title">FIRE 예상 결과</h1>
@@ -36,15 +32,9 @@ export default function ResultScreen() {
 
     <AssetChart result={result} startAge={input.age} />
 
-    {!already && <button className="calc-scenario" onClick={() => navigate(`${ROUTES.experiment}?inv=${input.monthlyInvest + BOOST}`)}>
-      <span>월 투자금을 늘리면?</span>
-      <strong>{saved && saved > 0 ? `월 50만 원 더 투자하면 약 ${duration(saved)} 빨라져요` : boosted.monthsToFire !== null && m === null ? `월 50만 원 더 투자하면 ${age(boosted.fireAge!.years, boosted.fireAge!.months)}에 도달해요` : "월 50만 원 더 투자하면 어떻게 될지 실험해 봐요"}</strong>
-      <b aria-hidden="true">›</b>
-    </button>}
-
     <div className="calc-actions">
-      <button className="calc-primary" onClick={() => navigate(ROUTES.flame)}>불꽃 키우러 가기</button>
       <button className="calc-secondary" onClick={() => navigate(ROUTES.input)}>조건 바꿔서 다시 계산</button>
+      <button className="calc-primary" onClick={() => navigate(ROUTES.flame)}>파이어 단계 진단하기</button>
     </div>
     <Disclaimer />
   </main>;

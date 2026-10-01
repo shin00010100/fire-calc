@@ -43,29 +43,29 @@ export default function FuelScreen() {
   const again = () => { setOutcome(null); setRaw(""); setError(""); };
 
   return <main className="fl-screen fl-fuel">
-    <h1 className="fl-title">장작을 넣어요</h1>
-    <p className="fl-lead">장작을 넣을 때마다 총 저축 금액이 늘어나고 불꽃이 다시 계산돼요. 여러 번 넣을 수 있어요.</p>
+    <h1 className="fl-title">저축을 기록해요</h1>
+    <p className="fl-lead">저축할 때마다 총 저축 금액이 늘어나고 불꽃이 다시 계산돼요. 여러 번 기록할 수 있어요.</p>
 
     {!outcome ? <>
-      <label className="fl-field" htmlFor="fuel-amount">넣을 장작 금액</label>
+      <label className="fl-field" htmlFor="fuel-amount">저축할 금액</label>
       <div className={`fl-box ${error ? "error" : ""}`}>
         <input id="fuel-amount" inputMode="numeric" placeholder="0" value={raw === "" ? "" : comma(Number(raw))} onChange={(e) => { setRaw(e.target.value.replace(/\D/g, "").replace(/^0+(?=\d)/, "")); setError(""); }} />
         <span>만원</span>
       </div>
       <p className={error ? "fl-error" : "fl-note"}>{error || [raw ? manwon(Number(raw) * 10_000) : "", `이번 달 누적 ${manwon(monthFuel.total)}`].filter(Boolean).join(" · ")}</p>
-      <button className="fl-btn fl-bottom" onClick={submit}>장작 넣기</button>
+      <button className="fl-btn fl-bottom" onClick={submit}>저축하기</button>
     </> : <section className="fl-card fl-outcome" aria-live="polite">
-      <div className="fl-log-drop" aria-hidden="true">🪵</div>
-      <strong className="fl-delta">장작 +{manwon(outcome.amount)}</strong>
+      <div className="fl-log-drop" aria-hidden="true">💰</div>
+      <strong className="fl-delta">저축 +{manwon(outcome.amount)}</strong>
       {outcome.target !== null && <div className="fl-progress light">
         <div className="fl-progress-head"><span>{STAGES[outcome.target].fire}까지</span><strong>{percent(outcome.toP)}</strong></div>
         <div className="fl-bar"><div className="grow" style={{ width: `${outcome.toP * 100}%`, "--from": `${outcome.fromP * 100}%` } as CSSProperties} /></div>
       </div>}
-      <p className="fl-month-total">이번 달 장작 누적 <b>{manwon(monthFuel.total)}</b> ({monthFuel.count}번)</p>
+      <p className="fl-month-total">이번 달 저축 누적 <b>{manwon(monthFuel.total)}</b> ({monthFuel.count}번)</p>
       {outcome.stagedUp !== null
         ? <button className="fl-btn" onClick={() => navigate(ROUTES.stageUp, { replace: true })}>{STAGES[outcome.stagedUp].fire} 점화 보기</button>
         : <button className="fl-btn" onClick={() => navigate(ROUTES.flame, { replace: true })}>불꽃으로 돌아가기</button>}
-      <button className="fl-btn ghost" onClick={again}>장작 더 넣기</button>
+      <button className="fl-btn ghost" onClick={again}>저축 더 하기</button>
     </section>}
   </main>;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { navigate, ROUTES, useLocation } from "../routes";
+import { navigate, ROUTES } from "../routes";
 import { ageAfter } from "../shared/calc/fire";
 import { stageReachMonths } from "../shared/calc/stages";
 import Disclaimer from "../shared/Disclaimer";
@@ -33,17 +33,15 @@ const apply = (b: FireInput, key: Field, v: number): FireInput => (key === "annu
 
 export default function ExperimentScreen() {
   const { ready, input: a, saveInput } = useFlameState();
-  const { query } = useLocation();
   useEffect(() => { if (ready && !a) navigate(ROUTES.input, { replace: true }); }, [ready, a]);
   if (!a) return null;
-  // key: 기존값이 바뀌면(장작을 넣은 뒤 등) 입력창을 새 기존값으로 다시 채운다
-  return <Experiment key={JSON.stringify(a)} a={a} presetInvest={Number(query.get("inv"))} onApply={saveInput} />;
+  // key: 기존값이 바뀌면(저축을 기록한 뒤 등) 입력창을 새 기존값으로 다시 채운다
+  return <Experiment key={JSON.stringify(a)} a={a} onApply={saveInput} />;
 }
 
-function Experiment({ a, presetInvest, onApply }: { a: FireInput; presetInvest: number; onApply: (input: FireInput) => Promise<void> }) {
+function Experiment({ a, onApply }: { a: FireInput; onApply: (input: FireInput) => Promise<void> }) {
   const base = useMemo(() => toDraft(a), [a]);
-  // 결과 화면의 "월 50만 원 더 투자하면?"에서 넘어오면 월 투자금 B 값을 미리 채운다
-  const [draft, setDraft] = useState<Draft>(() => (presetInvest > 0 ? { ...base, monthlyInvest: String(Math.round(presetInvest / MAN)) } : base));
+  const [draft, setDraft] = useState<Draft>(base);
   const [confirming, setConfirming] = useState(false);
 
   const { b, errors } = useMemo(() => {
@@ -128,7 +126,7 @@ function Experiment({ a, presetInvest, onApply }: { a: FireInput; presetInvest: 
         <ul className="fl-sheet-list">
           {changedFields.map((f) => <li key={f.key}>{f.label} <b>{comma(Number(base[f.key]))}{f.unit}</b> → <b>{comma(Number(draft[f.key]))}{f.unit}</b></li>)}
         </ul>
-        <p>지금 총 저축 금액 {manwon(b.assets)}이 새 시작 금액이 되고, 지금까지 넣은 장작 기록은 초기화돼요.</p>
+        <p>지금 총 저축 금액 {manwon(b.assets)}이 새 시작 금액이 되고, 지금까지의 저축 기록은 초기화돼요.</p>
         <div className="fl-sheet-actions">
           <button className="fl-btn ghost" onClick={() => setConfirming(false)}>취소</button>
           <button className="fl-btn" autoFocus onClick={applyExperiment}>적용하기</button>
