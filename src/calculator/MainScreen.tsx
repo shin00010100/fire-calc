@@ -5,7 +5,7 @@ import "./calculator.css";
 export default function MainScreen() {
   const { state } = useFlameStore();
   return <main className="calc-screen calc-main">
-    <div className="calc-main-hero">
+    <div className="calc-hero">
       <div className="calc-logo" aria-hidden="true">🔥</div>
       <h1>자유의 불꽃</h1>
       <p className="calc-tagline">내 FIRE 나이를 계산하고 불꽃을 키워요</p>
