@@ -76,7 +76,7 @@ export default function BuildingFire({ stage, size = 220, animated = true, label
       <span className="bf-glow" style={{ left: 110 - glowD / 2, bottom: glowBottom, width: glowD, height: glowD, background: `radial-gradient(circle, ${col.m} 0%, transparent 65%)` }} />
       {stage >= 3 && [0, 1, 2].map((k) => <span key={`sm${k}`} className="bf-smoke" style={{ left: 90 + k * 18, bottom: stage >= 5 ? 200 : 170, animationDuration: `${2.4 + 0.4 * k}s`, animationDelay: `${0.7 * k}s` }} />)}
       <div className="bf-building" />
-      <div className="bf-sign">(주)회사</div>
+      <div className="bf-sign">사무실</div>
       {windows}
       <span className="bf-door" />
       {stage === 0 && <>
