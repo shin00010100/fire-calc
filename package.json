@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build && ait build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "deploy": "ait deploy"
+    "deploy": "ait deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "@apps-in-toss/web-framework": "3.2.0",
@@ -25,6 +28,7 @@
     "@vitejs/plugin-react": "^6.1.0",
     "oxlint": "^1.79.0",
     "typescript": "~6.0.2",
-    "vite": "^8.2.2"
+    "vite": "^8.2.2",
+    "vitest": "^5.0.3"
   }
 }
