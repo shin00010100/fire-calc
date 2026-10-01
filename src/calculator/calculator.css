@@ -1,10 +1,8 @@
 .calc-screen {
   --accent: #2f5fd0; --accent-hover: #1f47a8; --accent-soft: #eef3ff;
   --text: #191f28; --sub: #4e5968; --hint: #6b7684; --section: #f2f4f6; --border: #d1d6db; --border-soft: #e5e8eb;
-  display: flex; flex-direction: column; gap: 20px; min-height: 100vh; padding: 8px 24px 32px; color: var(--text); background: #fff;
+  display: flex; flex-direction: column; gap: 20px; min-height: 100vh; padding: 24px 24px 32px; color: var(--text); background: #fff;
 }
-.calc-header { display: flex; align-items: center; gap: 4px; min-height: 48px; font-size: 17px; }
-.calc-back { width: 44px; height: 44px; margin-left: -12px; border: 0; color: var(--text); background: none; font-size: 30px; line-height: 1; cursor: pointer; }
 .calc-title { margin: 0; font-size: 24px; letter-spacing: -.5px; }
 
 .calc-primary, .calc-secondary { width: 100%; height: 56px; border: 0; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; }

@@ -7,7 +7,7 @@ import DevFlames from "./fire/DevFlames";
 import FuelScreen from "./fire/FuelScreen";
 import StageLadderScreen from "./fire/StageLadderScreen";
 import StageUpScreen from "./fire/StageUpScreen";
-import { navigate, ROUTES, useLocation } from "./routes";
+import { bindTossBack, navigate, ROUTES, useLocation } from "./routes";
 import { FlameStateProvider, useFlameStore } from "./shared/FlameStateContext";
 
 const FLAME_TABS: string[] = [ROUTES.flame, ROUTES.fuel, ROUTES.stageUp];
@@ -45,6 +45,7 @@ function Router() {
 }
 
 export default function App() {
+  useEffect(() => bindTossBack(), []);
   return <ThemeProvider>
     <FlameStateProvider>
       <Router />

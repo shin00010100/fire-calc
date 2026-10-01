@@ -22,7 +22,7 @@ export default function ResultScreen() {
   const saved = m !== null && boosted.monthsToFire !== null ? m - boosted.monthsToFire : null;
 
   return <main className="calc-screen">
-    <header className="calc-header"><button className="calc-back" aria-label="뒤로" onClick={() => navigate(ROUTES.input)}>‹</button><strong>FIRE 예상 결과</strong></header>
+    <h1 className="calc-title">FIRE 예상 결과</h1>
 
     <section className="calc-result-hero">
       <span>예상 FIRE 나이</span>
