@@ -55,6 +55,7 @@
 .fl-ladder li.current .fl-rung { border-color: var(--flame); background: var(--flame-soft); }
 .fl-rung-text { flex: 1; min-width: 0; }
 .fl-rung-text strong { display: block; font-size: 15px; }
+.fl-pct { margin-left: 6px; padding: 1px 7px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 11.5px; font-style: normal; font-weight: 700; vertical-align: 1px; }
 .fl-rung-text span { color: var(--sub); font-size: 12.5px; }
 .fl-rung em { color: var(--sub); font-size: 13px; font-style: normal; white-space: nowrap; }
 .fl-ladder li.current em { color: var(--flame); font-weight: 700; }
@@ -105,33 +106,40 @@
 .fl-verdict { padding: 18px; border-radius: 14px; color: #fff; background: var(--dark); font-size: 16px; font-weight: 700; line-height: 1.45; }
 .fl-hint-box { padding: 14px; border: 1.5px dashed #d6d3d1; border-radius: 14px; color: var(--sub); font-size: 13.5px; text-align: center; }
 
-/* 단계별 불꽃이 켜지는 나이 (단계마다 한 줄) */
-.fl-timeline { margin: 0; }
-.fl-timeline figcaption { font-size: 16px; font-weight: 700; }
-.tl-legend { display: flex; gap: 14px; margin: 8px 0 12px; color: var(--sub); font-size: 12.5px; }
-.tl-legend span { display: inline-flex; align-items: center; gap: 5px; }
-.tl-legend i { width: 12px; height: 12px; border-radius: 50%; }
-.tl-legend i.a, .tl-dot.a { background: #a8a29e; }
-.tl-legend i.b, .tl-dot.b { background: var(--flame); }
-.tl-inner { position: relative; margin: 0 8px; }
-.tl-axis .tl-inner { height: 18px; }
-.tl-axis span { position: absolute; transform: translateX(-50%); color: var(--sub); font-size: 11.5px; white-space: nowrap; }
-.tl-rows { margin: 0; padding: 0; list-style: none; }
-.tl-row { padding: 10px 0; border-top: 1px solid #f1e9e1; }
-.tl-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-.tl-head strong { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; font-size: 14.5px; }
-.tl-head strong i { align-self: center; width: 12px; height: 12px; border-radius: 50% 0 50% 50%; transform: rotate(-45deg); }
-.tl-head small { color: var(--hint); font-size: 11.5px; font-weight: 500; }
-.tl-ages { display: flex; flex-shrink: 0; flex-direction: column; align-items: flex-end; font-size: 13px; line-height: 1.5; text-align: right; white-space: nowrap; }
-.tl-ages .a { color: var(--sub); }
-.tl-ages .b { color: var(--flame); font-weight: 700; }
-.tl-track { margin-top: 6px; }
-.tl-track .tl-inner { height: 16px; }
-.tl-track .tl-inner::before { position: absolute; top: 7px; right: 0; left: 0; height: 2px; border-radius: 1px; background: #eee5dc; content: ""; }
-.tl-grid { position: absolute; top: 0; bottom: 0; width: 1px; background: #f1e9e1; }
-.tl-link { position: absolute; top: 6px; height: 4px; border-radius: 2px; background: rgba(234, 88, 12, .35); }
-.tl-dot { position: absolute; top: 2px; width: 12px; height: 12px; margin-left: -6px; border: 2px solid #fff; border-radius: 50%; }
-.tl-note { margin: 8px 0 0; color: var(--hint); font-size: 12px; line-height: 1.5; }
+/* 단계별 불꽃이 켜지는 나이: 나이(x) × 금액(y) 곡선 비교 */
+.sc { --ca: #2563eb; --cb: #ea580c; margin: 0; }
+.sc figcaption { font-size: 16px; font-weight: 700; }
+.sc-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 4px; color: var(--sub); font-size: 12.5px; }
+.sc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sc-legend i.line { width: 22px; height: 4px; border-radius: 2px; }
+.sc svg { display: block; width: 100%; overflow: visible; touch-action: pan-y; cursor: crosshair; }
+.sc-cap { fill: #78716c; font-size: 10.5px; font-weight: 600; }
+.sc-tick { fill: #78716c; font-size: 10.5px; }
+.sc-grid { stroke: #f3ece5; }
+.sc-axis { stroke: #d6d3d1; }
+.sc-line { stroke: #cfc7bf; stroke-dasharray: 4 4; }
+.sc-bline { stroke-width: 1; stroke-dasharray: 2 4; opacity: .55; }
+.sc-stage { fill: #44403c; font-size: 10.5px; font-weight: 600; }
+.sc-stage .no { fill: var(--flame); font-weight: 800; }
+.sc-curve { stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.sc-dot { font-size: 9.5px; font-weight: 800; }
+.sc-cursor { stroke: var(--hint); stroke-dasharray: 2 3; }
+.sc-hdot { stroke: #fff; stroke-width: 2; }
+.sc-tip { min-height: 20px; margin: 6px 0 0; color: var(--sub); font-size: 13px; text-align: center; }
+.sc-tip b { color: var(--text); }
+.sc-tip b.a { color: var(--ca); }
+.sc-tip b.b { color: var(--cb); }
+.sc-note { margin: 8px 0 0; color: var(--hint); font-size: 12px; line-height: 1.55; }
+.sc-table { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 13.5px; }
+.sc-table caption { margin-bottom: 4px; font-size: 14px; font-weight: 700; text-align: left; }
+.sc-table th, .sc-table td { padding: 9px 4px; border-top: 1px solid #f1e9e1; text-align: right; vertical-align: top; }
+.sc-table thead th { border-top: 0; font-size: 12.5px; }
+.sc-table thead th:first-child { text-align: left; }
+.sc-table th[scope="row"] { font-weight: 600; text-align: left; white-space: nowrap; }
+.sc-table .a { color: var(--ca); }
+.sc-table .b { color: var(--cb); font-weight: 700; }
+.sc-table small { display: block; font-size: 12px; font-weight: 600; }
+.sc-num { display: inline-grid; width: 18px; height: 18px; margin-right: 6px; place-items: center; border-radius: 50%; color: var(--badge-text); background: var(--badge-bg); font-size: 11px; font-style: normal; font-weight: 800; }
 
 /* 장작 넣기 */
 .fl-title { margin: 0; font-size: 24px; }
@@ -156,6 +164,8 @@
 .fl-sheet { width: 100%; max-width: 480px; padding: 24px 24px calc(20px + env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0; background: #fff; }
 .fl-sheet h2 { font-size: 19px; }
 .fl-sheet p { margin: 8px 0 4px; color: var(--sub); }
+.fl-sheet-list { margin: 10px 0 0; padding: 0; list-style: none; color: var(--text); font-size: 14px; line-height: 1.7; }
+.fl-sheet-list b { font-weight: 700; }
 .fl-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
 /* 단계 상승 */

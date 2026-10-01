@@ -3,9 +3,9 @@ import { navigate, ROUTES, useLocation } from "../routes";
 import { ageAfter } from "../shared/calc/fire";
 import { stageReachMonths } from "../shared/calc/stages";
 import Disclaimer from "../shared/Disclaimer";
-import { age, comma, duration } from "../shared/format";
+import { age, comma, duration, manwon } from "../shared/format";
 import type { FireInput } from "../shared/types";
-import StageTimeline from "./StageTimeline";
+import StageChart from "./StageChart";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
@@ -32,18 +32,19 @@ const toDraft = (a: FireInput): Draft => ({
 const apply = (b: FireInput, key: Field, v: number): FireInput => (key === "annualReturn" ? { ...b, annualReturn: v / 100 } : { ...b, [key]: v * MAN });
 
 export default function ExperimentScreen() {
-  const { ready, input: a } = useFlameState();
+  const { ready, input: a, saveInput } = useFlameState();
   const { query } = useLocation();
   useEffect(() => { if (ready && !a) navigate(ROUTES.input, { replace: true }); }, [ready, a]);
   if (!a) return null;
   // key: 기존값이 바뀌면(장작을 넣은 뒤 등) 입력창을 새 기존값으로 다시 채운다
-  return <Experiment key={JSON.stringify(a)} a={a} presetInvest={Number(query.get("inv"))} />;
+  return <Experiment key={JSON.stringify(a)} a={a} presetInvest={Number(query.get("inv"))} onApply={saveInput} />;
 }
 
-function Experiment({ a, presetInvest }: { a: FireInput; presetInvest: number }) {
+function Experiment({ a, presetInvest, onApply }: { a: FireInput; presetInvest: number; onApply: (input: FireInput) => Promise<void> }) {
   const base = useMemo(() => toDraft(a), [a]);
   // 결과 화면의 "월 50만 원 더 투자하면?"에서 넘어오면 월 투자금 B 값을 미리 채운다
   const [draft, setDraft] = useState<Draft>(() => (presetInvest > 0 ? { ...base, monthlyInvest: String(Math.round(presetInvest / MAN)) } : base));
+  const [confirming, setConfirming] = useState(false);
 
   const { b, errors } = useMemo(() => {
     let next = a;
@@ -57,9 +58,9 @@ function Experiment({ a, presetInvest }: { a: FireInput; presetInvest: number })
     return { b: next, errors: errs };
   }, [a, base, draft]);
 
-  const changed = FIELDS.some((f) => draft[f.key] !== base[f.key]);
+  const changedFields = FIELDS.filter((f) => draft[f.key] !== base[f.key]);
   const hasError = Object.keys(errors).length > 0;
-  const compare = changed && !hasError;
+  const compare = changedFields.length > 0 && !hasError;
 
   const reachA = useMemo(() => stageReachMonths(a), [a]);
   const reachB = useMemo(() => (compare ? stageReachMonths(b) : null), [b, compare]);
@@ -67,6 +68,12 @@ function Experiment({ a, presetInvest }: { a: FireInput; presetInvest: number })
   const set = (key: Field, raw: string, decimal?: boolean) => {
     const clean = decimal ? raw.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1").replace(/^0+(?=\d)/, "") : raw.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
     setDraft((d) => ({ ...d, [key]: clean }));
+  };
+
+  // 실험값(B)을 내 계획으로 저장. 나이는 정수로 맞추고, 지금 총 저축 금액이 새 시작 금액이 된다
+  const applyExperiment = async () => {
+    await onApply({ ...b, age: Math.floor(a.age) });
+    navigate(ROUTES.flame);
   };
 
   const full = (m: number | null) => { if (m === null) return "100년 이후"; if (m === 0) return "이미 달성"; const v = ageAfter(a.age, m); return age(v.years, v.months); };
@@ -98,7 +105,7 @@ function Experiment({ a, presetInvest }: { a: FireInput; presetInvest: number })
         {errors[f.key] && <p className="fl-error">{errors[f.key]}</p>}
       </div>)}
       <p className="fl-note">안전 인출률은 4%로 고정이에요. 기존값은 지금 내 계획이에요.</p>
-      <button className="fl-btn ghost" disabled={!changed} onClick={() => setDraft(base)}>기존값으로 되돌리기</button>
+      <button className="fl-btn ghost" disabled={changedFields.length === 0} onClick={() => setDraft(base)}>기존값으로 되돌리기</button>
     </section>
 
     {compare && reachB ? <>
@@ -107,11 +114,26 @@ function Experiment({ a, presetInvest }: { a: FireInput; presetInvest: number })
         <article className="a"><span>A 기존값 · 용광로</span><strong>{full(reachA[5])}</strong></article>
         <article className="b"><span>B 실험값 · 용광로</span><strong>{full(reachB[5])}</strong></article>
       </div>
+      <button className="fl-btn" onClick={() => setConfirming(true)}>실험값(B)을 내 계획으로 적용</button>
     </> : <div className="fl-hint-box">{hasError ? "입력값을 확인해 주세요" : "값을 바꿔 입력하면 B(실험값)와 비교해 드려요"}</div>}
 
     <section className="fl-card">
-      <StageTimeline a={reachA} b={reachB} ageYears={a.age} />
+      <StageChart a={a} b={compare ? b : null} reachA={reachA} reachB={reachB} />
     </section>
     <Disclaimer />
+
+    {confirming && <div className="fl-sheet-backdrop" onClick={() => setConfirming(false)}>
+      <div className="fl-sheet" role="dialog" aria-modal="true" aria-labelledby="exp-confirm" onClick={(e) => e.stopPropagation()}>
+        <h2 id="exp-confirm">실험값을 내 계획으로 적용할까요?</h2>
+        <ul className="fl-sheet-list">
+          {changedFields.map((f) => <li key={f.key}>{f.label} <b>{comma(Number(base[f.key]))}{f.unit}</b> → <b>{comma(Number(draft[f.key]))}{f.unit}</b></li>)}
+        </ul>
+        <p>지금 총 저축 금액 {manwon(b.assets)}이 새 시작 금액이 되고, 지금까지 넣은 장작 기록은 초기화돼요.</p>
+        <div className="fl-sheet-actions">
+          <button className="fl-btn ghost" onClick={() => setConfirming(false)}>취소</button>
+          <button className="fl-btn" autoFocus onClick={applyExperiment}>적용하기</button>
+        </div>
+      </div>
+    </div>}
   </main>;
 }
