@@ -1,9 +1,10 @@
 :root {
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #333d4b;
+  font-family: "Noto Sans KR", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #191f28;
   color-scheme: light;
   background: #ffffff;
 }
+:root[data-theme="flame"] { background: #fff7ed; }
 
 button,
 input {
@@ -19,30 +20,70 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: inherit;
 }
 
-#app,
-#root,
-my-element {
+#root {
   display: block;
   width: 100%;
+  max-width: 480px;
   min-height: 100vh;
-  padding: 0 20px;
+  margin: 0 auto;
+  overflow-x: hidden;
 }
 
 @media (min-width: 481px) {
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: #f5f5f5;
-  }
-
-  #app,
-  #root,
-  my-element {
-    max-width: 480px;
-    margin: 0 auto;
-    background-color: #ffffff;
-  }
+  body { background-color: #f2f4f6; }
 }
+
+.disclaimer {
+  margin: 4px 0 0;
+  color: #8b95a1;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tab-bar {
+  position: fixed;
+  z-index: 20;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  width: 100%;
+  max-width: 480px;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid #f0e6dc;
+  background: rgba(255, 255, 255, .96);
+  transform: translateX(-50%);
+  backdrop-filter: blur(12px);
+}
+.tab-bar button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 0;
+  color: #a8a29e;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tab-bar button span { font-size: 22px; filter: grayscale(1); opacity: .6; }
+.tab-bar button.active { color: #ea580c; font-weight: 700; }
+.tab-bar button.active span { filter: none; opacity: 1; }
+
+.toast {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  padding: 12px 20px;
+  color: #fff;
+  background: #1c1917;
+  font-size: 13px;
+  text-align: center;
+}
+
+:focus-visible { outline: 2px solid #2f5fd0; outline-offset: 2px; }

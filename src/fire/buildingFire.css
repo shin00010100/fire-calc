@@ -1,0 +1,35 @@
+.bf-root { position: relative; flex-shrink: 0; overflow: visible; }
+.bf-stage { position: absolute; bottom: 0; left: 0; width: 220px; height: 320px; transform-origin: 0 100%; }
+.bf-stage > * { position: absolute; }
+
+.bf-building { left: 60px; bottom: 0; width: 100px; height: 172px; border-radius: 4px 4px 0 0; background: #44403c; box-shadow: inset -10px 0 0 rgba(0, 0, 0, .18); }
+.bf-sign { left: 82px; bottom: 172px; display: grid; width: 56px; height: 14px; place-items: center; border-radius: 2px 2px 0 0; color: #d6d3d1; background: #57534e; font-size: 8px; font-weight: 700; line-height: 1; white-space: nowrap; }
+.bf-win { width: 18px; height: 14px; border-radius: 2px; }
+.bf-win.burning { animation: bf-win 1s ease-in-out infinite; }
+.bf-door { left: 100px; bottom: 0; width: 20px; height: 24px; border-radius: 2px 2px 0 0; background: #292524; }
+.bf-glow { border-radius: 50%; animation: bf-glow 2s ease-in-out infinite; pointer-events: none; }
+.bf-flame { border-radius: 50% 0 50% 50%; transform: rotate(-45deg); transform-origin: 50% 50%; animation: bf-flick 1s ease-in-out infinite; }
+.bf-smoke { width: 26px; height: 26px; border-radius: 50%; background: #78716c; opacity: 0; animation: bf-smoke 2.4s ease-out infinite; }
+.bf-match { left: 22px; bottom: 0; width: 5px; height: 34px; border-radius: 2px; background: #d6a35c; transform: rotate(-12deg); transform-origin: 50% 100%; }
+.bf-ember { width: 4px; height: 4px; border-radius: 50%; background: #fdba74; opacity: 0; animation: bf-burst 1.6s ease-out infinite; }
+.bf-spark { width: 7px; height: 7px; border-radius: 50%; opacity: 0; will-change: transform, opacity; animation: bf-burst 1.8s ease-out infinite; }
+
+@keyframes bf-flick { 0%, 100% { transform: rotate(-45deg) scale(1); } 30% { transform: rotate(-42deg) scale(1.06, .95); } 60% { transform: rotate(-48deg) scale(.95, 1.07); } }
+@keyframes bf-win { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
+@keyframes bf-glow { 0%, 100% { opacity: .55; } 50% { opacity: .9; } }
+@keyframes bf-smoke { 0% { transform: translateY(0) scale(.6); opacity: 0; } 20% { opacity: .5; } 100% { transform: translateY(-70px) scale(1.6); opacity: 0; } }
+@keyframes bf-burst { 0% { transform: translate(0, 0) scale(.4); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1); opacity: 0; } }
+
+/* 정지 프레임 (화면 밖 / animated=false / 동작 줄이기) */
+.bf-root.bf-static * { animation: none !important; }
+.bf-root.bf-static .bf-glow { opacity: .7; }
+.bf-root.bf-static .bf-smoke { opacity: .35; transform: translateY(-20px); }
+.bf-root.bf-static .bf-ember { opacity: .8; transform: translate(var(--dx), -20px); }
+.bf-root.bf-static .bf-spark { transform: translate(var(--dx), var(--dy)); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .bf-root * { animation: none !important; }
+  .bf-root .bf-glow { opacity: .7; }
+  .bf-root .bf-smoke { opacity: .35; transform: translateY(-20px); }
+  .bf-root .bf-ember { opacity: .8; transform: translate(var(--dx), -20px); }
+  .bf-root .bf-spark { transform: translate(var(--dx), var(--dy)); opacity: 1; }
+}
