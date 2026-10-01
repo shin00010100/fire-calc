@@ -74,6 +74,7 @@ body {
 .tab-bar button span { font-size: 22px; filter: grayscale(1); opacity: .6; }
 .tab-bar button.active { color: #ea580c; font-weight: 700; }
 .tab-bar button.active span { filter: none; opacity: 1; }
+.tab-bar button:disabled { opacity: .35; cursor: default; }
 
 .toast {
   position: sticky;
@@ -86,4 +87,4 @@ body {
   text-align: center;
 }
 
-:focus-visible { outline: 2px solid #2f5fd0; outline-offset: 2px; }
+:focus-visible { outline: 2px solid #ea580c; outline-offset: 2px; }
