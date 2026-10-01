@@ -26,16 +26,17 @@ export interface FireResult {
   series: { month: number; assets: number }[]; // 그래프용 (월 단위, 최대 1200)
 }
 
+/** 장작 한 번 넣은 기록. 한 달에 여러 번 가능 */
 export interface FuelLog {
   ym: string;            // 'YYYY-MM'
-  assets: number;        // 그 달 투자자산 총액
+  amount: number;        // 넣은 금액 (원)
   recordedAt: string;    // ISO
 }
 
 export interface FlameState {
-  version: 1;
-  input: FireInput | null;
-  logs: FuelLog[];       // ym 오름차순, 같은 ym 1개
+  version: 2;
+  input: FireInput | null;   // 입력 저장 시점의 값 (assets = 시작 금액)
+  logs: FuelLog[];       // 입력 저장 이후 넣은 장작, 시간순
   lastSeenStage: StageIndex;   // 축하 화면을 마지막으로 본 단계
   createdAt: string;     // 입력을 마지막으로 저장한 시각. 경과 개월(나이 증가) 기준점
 }

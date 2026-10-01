@@ -7,6 +7,7 @@ export const ROUTES = {
   result: "/result",
   flame: "/flame",
   fuel: "/fuel",
+  experiment: "/experiment",
   stageUp: "/stage-up",
   devFlames: "/dev/flames",
 } as const;

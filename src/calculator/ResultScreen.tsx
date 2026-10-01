@@ -37,7 +37,7 @@ export default function ResultScreen() {
 
     <AssetChart result={result} startAge={input.age} />
 
-    {!already && <button className="calc-scenario" onClick={() => navigate(`${ROUTES.flame}?compare=1&inv=${input.monthlyInvest + BOOST}#experiment`)}>
+    {!already && <button className="calc-scenario" onClick={() => navigate(`${ROUTES.experiment}?inv=${input.monthlyInvest + BOOST}`)}>
       <span>월 투자금을 늘리면?</span>
       <strong>{saved && saved > 0 ? `월 50만 원 더 투자하면 약 ${duration(saved)} 빨라져요` : boosted.monthsToFire !== null && m === null ? `월 50만 원 더 투자하면 ${age(boosted.fireAge!.years, boosted.fireAge!.months)}에 도달해요` : "월 50만 원 더 투자하면 어떻게 될지 실험해 봐요"}</strong>
       <b aria-hidden="true">›</b>

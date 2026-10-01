@@ -71,7 +71,7 @@ export default function BuildingFire({ stage, size = 220, animated = true, label
   const glowD = GLOW_D[stage];
   const glowBottom = stage >= 5 ? 40 : GLOW_CY[stage] - glowD / 2;
 
-  return <div ref={ref} className={`bf-root ${live ? "" : "bf-static"}`} style={{ width: size, height: (size * 320) / 220 }} role="img" aria-label={label ?? `${stage}단계 ${meta.fire}: ${meta.scene}`}>
+  return <div ref={ref} className={`bf-root ${live ? "" : "bf-static"}`} style={{ width: size, height: (size * 320) / 220 }} role="img" aria-label={label ?? `${stage}단계 ${meta.fire}: ${meta.summary}`}>
     <div className="bf-stage" style={{ transform: `scale(${scale})` }} aria-hidden="true">
       <span className="bf-glow" style={{ left: 110 - glowD / 2, bottom: glowBottom, width: glowD, height: glowD, background: `radial-gradient(circle, ${col.m} 0%, transparent 65%)` }} />
       {stage >= 3 && [0, 1, 2].map((k) => <span key={`sm${k}`} className="bf-smoke" style={{ left: 90 + k * 18, bottom: stage >= 5 ? 200 : 170, animationDuration: `${2.4 + 0.4 * k}s`, animationDelay: `${0.7 * k}s` }} />)}

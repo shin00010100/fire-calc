@@ -8,7 +8,7 @@ interface FlameStateValue {
   ready: boolean;
   persistFailed: boolean;
   saveInput: (input: FireInput) => Promise<void>;
-  addFuelLog: (ym: string, assets: number) => Promise<{ prevStage: StageIndex; newStage: StageIndex }>;
+  addFuelLog: (ym: string, amount: number) => Promise<{ prevStage: StageIndex; newStage: StageIndex }>;
   setLastSeenStage: (s: StageIndex) => Promise<void>;
 }
 
@@ -27,7 +27,7 @@ export function FlameStateProvider({ children }: { children: ReactNode }) {
   const value = useMemo<FlameStateValue>(() => ({
     state, ready, persistFailed,
     saveInput: async (input) => sync(await storage.saveInput(input)),
-    addFuelLog: async (ym, assets) => { const r = await storage.addFuelLog(ym, assets); sync(r.state); return { prevStage: r.prevStage, newStage: r.newStage }; },
+    addFuelLog: async (ym, amount) => { const r = await storage.addFuelLog(ym, amount); sync(r.state); return { prevStage: r.prevStage, newStage: r.newStage }; },
     setLastSeenStage: async (s) => sync(await storage.setLastSeenStage(s)),
   }), [state, ready, persistFailed, sync]);
 

@@ -9,7 +9,7 @@ export default function DevFlames() {
     <div className="fl-dev-row">
       {STAGE_INDICES.map((s) => <figure key={s}>
         <BuildingFire stage={s} size={150} />
-        <figcaption><span>{s}단계</span><strong>{STAGES[s].fire}</strong><small>{STAGES[s].fireStage}</small><em>{STAGES[s].scene}</em></figcaption>
+        <figcaption><span>{s}단계</span><strong>{STAGES[s].fire}</strong><small>{STAGES[s].fireStage}</small><em>{STAGES[s].summary}</em></figcaption>
       </figure>)}
     </div>
   </main>;

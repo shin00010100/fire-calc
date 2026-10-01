@@ -39,13 +39,13 @@ export default function StageUpScreen() {
     <div className="su-body">
       <div className="su-art"><BuildingFire stage={stages.stage} size={240} /></div>
       <h1>{meta.fire} 점화! {meta.fireStage} 달성</h1>
-      <p className="fl-scene">{meta.scene}</p>
+      <p className="fl-summary">{meta.summary}</p>
       <div className="su-next">
         {next !== null
           ? <>다음은 <b>{STAGES[next].fire}</b> · {nextMonths === null ? "100년 이후" : `${duration(nextMonths)} · 예상 ${age(nextAge!.years, nextAge!.months)}`}</>
           : "모든 불꽃을 피웠어요. 넉넉한 자유를 누려요"}
       </div>
     </div>
-    <button className="fl-btn" onClick={() => navigate(ROUTES.flame, { replace: true })}>사다리에서 확인하기</button>
+    <button className="fl-btn" onClick={() => navigate(ROUTES.flame, { replace: true })}>파이어 단계에서 확인하기</button>
   </main>;
 }

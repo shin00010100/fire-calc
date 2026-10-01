@@ -4,13 +4,14 @@ import InputScreen from "./calculator/InputScreen";
 import MainScreen from "./calculator/MainScreen";
 import ResultScreen from "./calculator/ResultScreen";
 import DevFlames from "./fire/DevFlames";
+import ExperimentScreen from "./fire/ExperimentScreen";
 import FuelScreen from "./fire/FuelScreen";
 import StageLadderScreen from "./fire/StageLadderScreen";
 import StageUpScreen from "./fire/StageUpScreen";
 import { bindTossBack, navigate, ROUTES, useLocation } from "./routes";
 import { FlameStateProvider, useFlameStore } from "./shared/FlameStateContext";
 
-const FLAME_TABS: string[] = [ROUTES.flame, ROUTES.fuel, ROUTES.stageUp];
+const FLAME_TABS: string[] = [ROUTES.flame, ROUTES.fuel, ROUTES.stageUp, ROUTES.experiment];
 
 function TabBar({ path }: { path: string }) {
   const { state } = useFlameStore();
@@ -32,6 +33,7 @@ function Router() {
     case ROUTES.result: screen = <ResultScreen />; break;
     case ROUTES.flame: screen = <StageLadderScreen />; break;
     case ROUTES.fuel: screen = <FuelScreen />; break;
+    case ROUTES.experiment: screen = <ExperimentScreen />; break;
     case ROUTES.stageUp: screen = <StageUpScreen />; break;
     case ROUTES.devFlames: screen = import.meta.env.DEV ? <DevFlames /> : <MainScreen />; break;
     default: screen = <MainScreen />;

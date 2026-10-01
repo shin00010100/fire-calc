@@ -16,10 +16,9 @@ export default function StagePopover({ id, stage }: { id: string; stage: StageIn
   const m = STAGES[stage];
   return <div ref={ref} id={id} className={`fl-popover ${above ? "above" : ""}`} role="region" aria-label={`${m.fire} 단계 설명`}>
     <strong>{m.fire} · {m.fireStage}</strong>
-    <p>{m.desc}</p>
     <dl>
       <div><dt>판정 기준</dt><dd>{m.criteria}</dd></div>
-      <div><dt>일의 의미</dt><dd>{m.work}</dd></div>
+      <div><dt>이 단계의 의미</dt><dd>{m.meaning}</dd></div>
     </dl>
   </div>;
 }

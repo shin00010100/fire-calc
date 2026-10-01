@@ -18,8 +18,10 @@
 .calc-logo { display: grid; width: 72px; height: 72px; margin: 0 auto 20px; place-items: center; border-radius: 22px; background: var(--accent-soft); font-size: 38px; }
 .calc-main h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: -.6px; }
 .calc-main p { margin: 0; color: var(--hint); font-size: 16px; }
+.calc-main .calc-purpose { margin-top: 18px; color: var(--sub); font-size: 14px; line-height: 1.65; word-break: keep-all; }
 
 /* 입력 */
+.calc-lead { margin: -12px 0 0; color: var(--hint); font-size: 14px; }
 .calc-form { display: flex; flex-direction: column; gap: 22px; }
 .calc-field label, .calc-label { display: block; margin-bottom: 8px; color: var(--sub); font-size: 14px; font-weight: 600; }
 .calc-box { display: flex; align-items: center; height: 52px; padding: 0 16px; border: 2px solid transparent; border-radius: 12px; background: var(--section); }
@@ -30,9 +32,13 @@
 .calc-hint, .calc-error { margin: 6px 2px 0; font-size: 13px; }
 .calc-hint { color: var(--hint); }
 .calc-error { color: #f04452; }
-.calc-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
-.calc-chips button { min-height: 44px; padding: 0 4px; border: 1px solid var(--border); border-radius: 10px; color: var(--sub); background: #fff; font-size: 14px; cursor: pointer; }
-.calc-chips button.selected { border: 2px solid var(--accent); color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+.calc-box.fixed { justify-content: space-between; color: var(--hint); }
+.calc-box.fixed strong { color: var(--text); font-size: 18px; }
+.calc-styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.calc-styles button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 8px 4px; border: 1px solid var(--border); border-radius: 12px; color: var(--sub); background: #fff; cursor: pointer; }
+.calc-styles button strong { font-size: 15px; }
+.calc-styles button span { font-size: 13px; }
+.calc-styles button.selected { border: 2px solid var(--accent); color: var(--accent); background: var(--accent-soft); }
 .calc-bottom { position: sticky; bottom: 0; margin: 0 -24px -32px; padding: 12px 24px 20px; background: linear-gradient(transparent, #fff 30%); }
 
 /* 결과 */

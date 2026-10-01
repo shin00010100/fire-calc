@@ -2,6 +2,7 @@ import { Storage as AitStorage } from "@apps-in-toss/web-framework";
 import { currentFlameInput } from "./calc/current";
 import { determineStage } from "./calc/stages";
 import { ymKey } from "./format";
+import { emptyState, migrateState } from "./migrate";
 import type { FireInput, FlameState, StageIndex } from "./types";
 
 const KEY = "freedom-flame:v1";
@@ -53,7 +54,7 @@ async function pickKV(): Promise<KV> {
   return kv;
 }
 
-export const defaultState = (): FlameState => ({ version: 1, input: null, logs: [], lastSeenStage: 0, createdAt: new Date().toISOString() });
+export const defaultState = emptyState;
 
 let cache: FlameState | null = null;
 
@@ -61,8 +62,7 @@ export async function loadState(): Promise<FlameState> {
   if (cache) return cache;
   try {
     const raw = await (await pickKV()).getItem(KEY);
-    const parsed = raw ? (JSON.parse(raw) as FlameState) : null;
-    cache = parsed?.version === 1 ? parsed : defaultState();
+    cache = raw ? migrateState(JSON.parse(raw)) : defaultState();
   } catch {
     cache = defaultState();
   }
@@ -94,21 +94,22 @@ const flameStage = (state: FlameState, now: Date) => {
 };
 
 /**
- * 입력 저장. 나이 경과 기준점(createdAt)을 다시 잡고, 계산기로 바꾼 값으로는 축하하지 않도록
- * lastSeenStage를 새 입력의 단계로 맞춘다(축하는 장작 넣기·시간 경과로 오를 때만).
+ * 입력 저장. 입력한 자산이 새 시작 금액이 되므로 장작 기록을 비우고 나이 경과 기준점(createdAt)을 다시 잡는다.
+ * 계산기로 바꾼 값으로는 축하하지 않도록 lastSeenStage를 새 입력의 단계로 맞춘다(축하는 장작 넣기·시간 경과로 오를 때만).
  */
 export async function saveInput(input: FireInput): Promise<FlameState> {
   const state = await loadState();
-  const next: FlameState = { ...state, input, createdAt: new Date().toISOString() };
+  const next: FlameState = { ...state, input, logs: [], createdAt: new Date().toISOString() };
   next.lastSeenStage = flameStage(next, new Date());
   return write(next);
 }
 
-export async function addFuelLog(ym: string, assets: number): Promise<{ prevStage: StageIndex; newStage: StageIndex; state: FlameState }> {
+/** 장작 넣기: 한 달에 여러 번 가능 */
+export async function addFuelLog(ym: string, amount: number): Promise<{ prevStage: StageIndex; newStage: StageIndex; state: FlameState }> {
   const state = await loadState();
   const now = new Date();
   const prevStage = flameStage(state, now);
-  const logs = [...state.logs.filter((l) => l.ym !== ym), { ym, assets, recordedAt: now.toISOString() }].sort((a, b) => a.ym.localeCompare(b.ym));
+  const logs = [...state.logs, { ym, amount, recordedAt: now.toISOString() }];
   const next = await write({ ...state, logs });
   return { prevStage, newStage: flameStage(next, now), state: next };
 }

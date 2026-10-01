@@ -8,14 +8,12 @@ export default function MainScreen() {
     <div className="calc-main-hero">
       <div className="calc-logo" aria-hidden="true">🔥</div>
       <h1>자유의 불꽃</h1>
-      <p>내 FIRE 나이를 계산하고 불꽃을 키워요</p>
+      <p className="calc-tagline">내 FIRE 나이를 계산하고 불꽃을 키워요</p>
+      <p className="calc-purpose">경제적 자유(FIRE)에 필요한 목표 자산과 도달 나이를 계산하고, 장작을 넣듯 꾸준히 투자하며 단계별 진행 상황을 확인하는 서비스예요.</p>
     </div>
     <div className="calc-actions">
-      <button className="calc-primary" onClick={() => navigate(ROUTES.input)}>내 FIRE 나이 계산하기</button>
-      {state.input && <>
-        <button className="calc-secondary" onClick={() => navigate(ROUTES.result)}>지난 결과 보기</button>
-        <button className="calc-secondary" onClick={() => navigate(ROUTES.flame)}>불꽃 보러 가기</button>
-      </>}
+      {/* 처음이면 조건 입력, 이미 입력했다면 불꽃 화면으로 */}
+      <button className="calc-primary" onClick={() => navigate(state.input ? ROUTES.flame : ROUTES.input)}>시작하기</button>
     </div>
   </main>;
 }

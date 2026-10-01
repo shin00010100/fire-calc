@@ -4,13 +4,13 @@ import type { FireInput } from "../../types";
 import { ageAfter, calculateFire, simulate, targetAssets } from "../fire";
 import { calculateHeat } from "../heat";
 import { calculateStages, determineStage, stageReachMonths } from "../stages";
-import { currentFlameInput, monthsBetween } from "../current";
+import { currentFlameInput, fuelOfMonth, fuelTotal, monthsBetween } from "../current";
 
 const P: FireInput = { age: 30, assets: 50_000_000, monthlyInvest: 1_500_000, annualReturn: 0.07, monthlyExpense: 3_000_000, withdrawalRate: 0.04 };
 const reachList = (input: FireInput) => { const r = stageReachMonths(input); return [r[1], r[2], r[3], r[4], r[5], r[6]]; };
 
 describe("30세 페르소나 (§6.8)", () => {
-  it("기본값이 페르소나와 같다", () => expect(DEFAULT_INPUT).toEqual(P));
+  it("기본값은 페르소나에서 투자성향만 평균형(5%)", () => expect(DEFAULT_INPUT).toEqual({ ...P, annualReturn: 0.05 }));
 
   it("목표 자산 9억", () => expect(targetAssets(P)).toBe(900_000_000));
 
@@ -86,12 +86,25 @@ describe("예외", () => {
   });
 });
 
-describe("§6.7 불꽃 화면 입력", () => {
-  it("경과 개월만큼 나이 증가, 최신 기록 자산 사용", () => {
-    const state = { version: 1 as const, input: P, lastSeenStage: 0 as const, createdAt: "2026-01-15T00:00:00.000Z", logs: [{ ym: "2026-06", assets: 70_000_000, recordedAt: "2026-06-10T00:00:00.000Z" }] };
+describe("불꽃 화면 입력 (장작 여러 번)", () => {
+  const state = {
+    version: 2 as const, input: P, lastSeenStage: 0 as const, createdAt: "2026-01-15T00:00:00.000Z",
+    logs: [
+      { ym: "2026-06", amount: 5_000_000, recordedAt: "2026-06-10T00:00:00.000Z" },
+      { ym: "2026-06", amount: 2_000_000, recordedAt: "2026-06-20T00:00:00.000Z" },
+      { ym: "2026-05", amount: 1_000_000, recordedAt: "2026-05-02T00:00:00.000Z" },
+    ],
+  };
+  it("경과 개월만큼 나이 증가, 시작 금액에 장작 합계를 더한다", () => {
     expect(monthsBetween("2026-01", "2027-03")).toBe(14);
     const cur = currentFlameInput(state, "2026-07")!;
-    expect(cur.assets).toBe(70_000_000);
+    expect(cur.assets).toBe(50_000_000 + 8_000_000);
     expect(cur.age).toBeCloseTo(30.5, 5);
   });
+  it("이번 달 장작 누적과 횟수", () => {
+    expect(fuelTotal(state)).toBe(8_000_000);
+    expect(fuelOfMonth(state, "2026-06")).toEqual({ total: 7_000_000, count: 2 });
+    expect(fuelOfMonth(state, "2026-07")).toEqual({ total: 0, count: 0 });
+  });
+  it("입력이 없으면 null", () => expect(currentFlameInput({ ...state, input: null }, "2026-07")).toBeNull());
 });
