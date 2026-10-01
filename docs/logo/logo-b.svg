@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <!-- 시안 B: 어두운 배경 + 빛나는 불꽃 -->
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="56%" r="50%">
+      <stop offset="0" stop-color="#9A3412" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#1C1917" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="outer" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FB923C"/><stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE047"/><stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="#1C1917"/>
+  <rect width="600" height="600" fill="url(#glow)"/>
+  <!-- 장작 -->
+  <g transform="rotate(-10 300 495)"><rect x="150" y="478" width="300" height="38" rx="19" fill="#7C3F1D"/><circle cx="430" cy="497" r="12" fill="#C08457"/></g>
+  <g transform="rotate(10 300 495)"><rect x="150" y="478" width="300" height="38" rx="19" fill="#8B4A22"/><circle cx="170" cy="497" r="12" fill="#C08457"/></g>
+  <!-- 불꽃 3겹 -->
+  <path fill="url(#outer)" d="M300 480C160 480 138 360 205 270C238 226 246 182 234 132C306 172 344 228 344 284C364 262 376 234 372 202C444 260 468 336 468 386C468 444 408 480 300 480Z"/>
+  <path fill="url(#mid)" d="M300 480C210 480 196 404 240 346C262 318 268 290 262 258C310 284 332 320 332 356C346 342 354 324 350 302C398 340 412 386 412 414C412 454 370 480 300 480Z"/>
+  <path fill="#FEF9C3" d="M300 480C252 480 244 438 268 406C280 390 284 374 280 356C308 372 320 392 320 412C328 404 332 394 330 382C356 404 362 428 362 442C362 466 338 480 300 480Z"/>
+  <!-- 불티 -->
+  <g fill="#FDBA74"><circle cx="196" cy="190" r="7"/><circle cx="410" cy="150" r="6"/><circle cx="448" cy="232" r="5"/><circle cx="166" cy="276" r="4"/></g>
+</svg>
