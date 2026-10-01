@@ -56,6 +56,22 @@ export function progressToNext(input: FireInput, stage = determineStage(input)):
   return Math.min(1, Math.max(0, stageRatio((stage + 1) as StageIndex, input.assets, input.age, input)));
 }
 
+/**
+ * 단계 s에 닿는 데 필요한 자산이 목표 자산의 몇 배인지.
+ * 불씨는 "지금 자산을 더 넣지 않고 60세까지 굴려 목표에 닿는" 조건이라 1 ÷ (60세까지의 성장 배수)다.
+ */
+export function requiredRatio(s: StageIndex, input: FireInput): number {
+  switch (s) {
+    case 0: return 0;
+    case 1: return 1 / coastValue(1, input.age, input);
+    case 2: return TH.semi;
+    case 3: return TH.barista;
+    case 4: return TH.lean;
+    case 5: return TH.full;
+    case 6: return TH.fat;
+  }
+}
+
 export function calculateStages(input: FireInput): StageResult {
   const stage = determineStage(input);
   return {
@@ -65,5 +81,6 @@ export function calculateStages(input: FireInput): StageResult {
     progressToNext: progressToNext(input, stage),
     targetAssets: targetAssets(input),
     coverage: coverage(input),
+    requiredRatio: Object.fromEntries(STAGE_INDICES.map((s) => [s, requiredRatio(s, input)])) as Record<StageIndex, number>,
   };
 }

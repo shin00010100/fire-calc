@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ageAfter } from "../shared/calc/fire";
 import { BF_COL, STAGE_INDICES, STAGES } from "../shared/constants";
-import { age } from "../shared/format";
+import { age, eok } from "../shared/format";
 import type { StageIndex, StageResult } from "../shared/types";
 import StagePopover from "./StagePopover";
 
@@ -34,17 +34,21 @@ export default function Ladder({ stages, ageYears }: { stages: StageResult; ageY
       const future = s > stages.stage;
       const reachAge = reach !== null ? ageAfter(ageYears, reach) : null;
       const popId = `stage-pop-${s}`;
+      // 올림해서 "이 비율 이상"이 정확하게 읽히도록 한다
+      const ratio = stages.requiredRatio[s];
+      const pct = `${Math.ceil(ratio * 100 - 1e-9)}%`;
+      const need = ratio > 0 ? Math.ceil((ratio * stages.targetAssets) / 10_000 - 1e-6) * 10_000 : 0;
       return <li key={s} className={`${isCurrent ? "current" : ""} ${future ? "future" : ""}`}>
         <div className="fl-rung">
           <FlameDrop stage={s} size={isCurrent ? 20 : 16} />
           <div className="fl-rung-text">
-            <strong>{m.fire}</strong>
+            <strong>{m.fire}<i className="fl-pct" aria-label={`목표 자산의 ${pct}`}>{pct}</i></strong>
             <span>{m.fireStage}</span>
           </div>
           <em>{isCurrent ? "지금 여기" : done ? "달성 ✓" : reachAge ? age(reachAge.years, reachAge.months) : "100년+"}</em>
           <button className="fl-info" aria-label={`${m.fire} 단계 설명`} aria-expanded={open === s} aria-controls={open === s ? popId : undefined} onClick={() => setOpen(open === s ? null : s)}>i</button>
         </div>
-        {open === s && <StagePopover id={popId} stage={s} />}
+        {open === s && <StagePopover id={popId} stage={s} required={need > 0 ? `${eok(need)} 이상 (목표 자산의 ${pct})` : undefined} />}
       </li>;
     })}
   </ol>;

@@ -3,7 +3,7 @@ import { DEFAULT_INPUT } from "../../constants";
 import type { FireInput } from "../../types";
 import { ageAfter, calculateFire, simulate, targetAssets } from "../fire";
 import { calculateHeat } from "../heat";
-import { calculateStages, determineStage, stageReachMonths } from "../stages";
+import { calculateStages, determineStage, requiredRatio, stageReachMonths } from "../stages";
 import { currentFlameInput, fuelOfMonth, fuelTotal, monthsBetween } from "../current";
 
 const P: FireInput = { age: 30, assets: 50_000_000, monthlyInvest: 1_500_000, annualReturn: 0.07, monthlyExpense: 3_000_000, withdrawalRate: 0.04 };
@@ -50,6 +50,27 @@ describe("30세 페르소나 (§6.8)", () => {
     const a = simulate(P, 53);
     expect(Math.round(calculateHeat({ ...P, assets: a[52] }).won)).toBe(30_190);
     expect(Math.round(calculateHeat({ ...P, assets: a[53] }).won)).toBe(30_648);
+  });
+});
+
+describe("단계별 필요 비율", () => {
+  it("고정 비율 단계", () => {
+    const r = calculateStages(P).requiredRatio;
+    expect([r[0], r[2], r[3], r[4], r[5], r[6]]).toEqual([0, 0.3, 0.6, 0.7, 1, 1.5]);
+  });
+  it("불씨는 60세까지의 성장 배수의 역수 (30세, 7% → 약 13%)", () => {
+    expect(requiredRatio(1, P)).toBeCloseTo(1 / Math.pow(1.07, 30), 10);
+    expect(Math.ceil(requiredRatio(1, P) * 100)).toBe(14);
+    expect(Math.ceil(requiredRatio(1, { ...P, annualReturn: 0.05 }) * 100)).toBe(24);
+  });
+  it("60세 이상이거나 수익률 0이면 100%", () => {
+    expect(requiredRatio(1, { ...P, age: 60 })).toBe(1);
+    expect(requiredRatio(1, { ...P, annualReturn: 0 })).toBe(1);
+  });
+  it("필요 비율을 채우면 해당 단계가 충족된다", () => {
+    for (const s of [1, 2, 3, 4, 5, 6] as const) {
+      expect(determineStage({ ...P, assets: requiredRatio(s, P) * 900_000_000 + 1 })).toBeGreaterThanOrEqual(s);
+    }
   });
 });
 
