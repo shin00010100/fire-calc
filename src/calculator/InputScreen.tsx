@@ -52,7 +52,6 @@ export default function InputScreen() {
   };
 
   return <main className="calc-screen">
-    <header className="calc-header"><button className="calc-back" aria-label="뒤로" onClick={() => window.history.length > 1 ? window.history.back() : navigate(ROUTES.main)}>‹</button></header>
     <h1 className="calc-title">FIRE 조건을 알려주세요</h1>
     <div className="calc-form">
       <div className="calc-field" ref={bind("age")}>

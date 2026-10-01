@@ -50,7 +50,6 @@ export default function FuelScreen() {
   };
 
   return <main className="fl-screen fl-fuel">
-    <header className="fl-header"><button className="fl-back" aria-label="뒤로" onClick={() => navigate(ROUTES.flame)}>‹</button></header>
     <h1 className="fl-title">이번 달 장작을 넣어요</h1>
     <p className="fl-lead">한 달에 한 번, 지금 투자자산 총액만 적으면 불이 다시 계산돼요.</p>
 
