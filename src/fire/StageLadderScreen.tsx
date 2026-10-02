@@ -11,6 +11,7 @@ import FuelCard from "./FuelCard";
 import FuelHistory from "./FuelHistory";
 import Ladder from "./Ladder";
 import TotalAssetsSheet from "./TotalAssetsSheet";
+import { useCountUp } from "../shared/useCountUp";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
@@ -18,6 +19,7 @@ export default function StageLadderScreen() {
   const { ready, state, input, stages, nowYm, monthFuel, setTotalAssets, setCurrentAge } = useFlameState();
   const [editing, setEditing] = useState(false);
   const [editingAge, setEditingAge] = useState(false);
+  const shownAssets = useCountUp(input?.assets ?? 0);
 
   useEffect(() => {
     if (!ready) return;
@@ -44,7 +46,7 @@ export default function StageLadderScreen() {
       <dl className="fl-stats">
         <div><dt>현재 나이<button className="fl-edit" onClick={() => setEditingAge(true)} aria-label="현재 나이 수정">수정</button></dt><dd>만 {Math.floor(input.age)}세</dd></div>
         <div><dt>FIRE 달성 나이</dt><dd>{fireAge}</dd></div>
-        <div><dt>총 저축 금액<button className="fl-edit" onClick={() => setEditing(true)} aria-label="총 저축 금액 수정">수정</button></dt><dd>{manwon(input.assets)}</dd></div>
+        <div><dt>총 저축 금액<button className="fl-edit" onClick={() => setEditing(true)} aria-label="총 저축 금액 수정">수정</button></dt><dd>{manwon(shownAssets)}</dd></div>
         <div><dt>다음 단계 목표 금액</dt><dd>{next ? eok(nextNeed) : "모든 단계 달성"}{next && <small>{next.fire} · {Math.ceil(nextRatio * 100 - 1e-9)}%</small>}</dd></div>
       </dl>
     </section>

@@ -1,17 +1,33 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { navigate, ROUTES } from "../routes";
 import { ageAfter } from "../shared/calc/fire";
-import { STAGES } from "../shared/constants";
+import { BF_COL, STAGES } from "../shared/constants";
 import { age, duration } from "../shared/format";
+import type { StageIndex } from "../shared/types";
 import BuildingFire from "./BuildingFire";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
 const COLORS = ["#FDE047", "#F472B6", "#60A5FA", "#A3E635", "#FB923C"];
 
-function Fireworks() {
+/** 단계가 높을수록 불씨가 더 많이, 더 높이 솟아오른다 */
+const EMBERS = [0, 8, 12, 16, 22, 28, 36];
+
+function Embers({ stage }: { stage: StageIndex }) {
+  const col = BF_COL[stage];
+  return <div className="su-embers" aria-hidden="true">
+    {Array.from({ length: EMBERS[stage] }, (_, i) => <i key={i} style={{
+      left: `${(i * 37) % 86 + 7}%`, width: 4 + (i % 3) * 2, height: 4 + (i % 3) * 2,
+      background: i % 2 ? col.c : col.m, boxShadow: `0 0 8px ${col.o}`,
+      animationDelay: `${((i * 0.37) % 2.4).toFixed(2)}s`, animationDuration: `${2.6 + (i % 4) * 0.5}s`,
+      "--dx": `${((i % 5) - 2) * 14}px`, "--rise": `${-(160 + stage * 40 + (i % 4) * 30)}px`,
+    } as CSSProperties} />)}
+  </div>;
+}
+
+function Fireworks({ bursts }: { bursts: number }) {
   return <div className="su-fireworks" aria-hidden="true">
-    {[[20, 25], [75, 18], [50, 40], [30, 55], [80, 50]].map(([cx, cy], b) => Array.from({ length: 14 }, (_, i) => {
+    {[[20, 25], [75, 18], [50, 40], [30, 55], [80, 50]].slice(0, bursts).map(([cx, cy], b) => Array.from({ length: 14 }, (_, i) => {
       const a = (i / 14) * Math.PI * 2, r = 70 + (i % 2) * 20, c = COLORS[(i + b) % COLORS.length];
       return <span key={`${b}-${i}`} style={{ left: `${cx}%`, top: `${cy}%`, background: c, boxShadow: `0 0 8px ${c}`, animationDelay: `${b * 0.25}s`, "--dx": `${Math.cos(a) * r}px`, "--dy": `${Math.sin(a) * r}px` } as CSSProperties} />;
     }))}
@@ -35,7 +51,9 @@ export default function StageUpScreen() {
   const nextAge = nextMonths !== null ? ageAfter(input.age, nextMonths) : null;
 
   return <main className="fl-screen su-screen">
-    {stages.stage === 6 && fireworks && <Fireworks />}
+    <div className="su-flash" aria-hidden="true" />
+    {stages.stage >= 1 && <Embers stage={stages.stage} />}
+    {stages.stage >= 5 && fireworks && <Fireworks bursts={stages.stage === 6 ? 5 : 2} />}
     <div className="su-body">
       <div className="su-art"><BuildingFire stage={stages.stage} size={window.innerHeight < 800 ? 190 : 240} /></div>
       <h1>{meta.fire} 점화! {meta.fireStage} 달성</h1>

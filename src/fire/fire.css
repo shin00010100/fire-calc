@@ -33,11 +33,17 @@
 .fl-progress-head { display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; font-size: 14px; font-weight: 600; }
 .fl-progress-head strong { color: #fdba74; }
 .fl-progress.light .fl-progress-head strong { color: var(--flame); }
-.fl-bar { height: 12px; margin-top: 8px; overflow: hidden; border-radius: 6px; background: rgba(255, 255, 255, .15); }
+.fl-bar { position: relative; height: 12px; margin-top: 8px; border-radius: 6px; background: rgba(255, 255, 255, .15); }
 .fl-progress.light .fl-bar { background: #f5ebe1; }
 .fl-bar div { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ea580c, #fbbf24); transition: width .6s; }
 .fl-bar div.grow { animation: fl-grow 1s ease-out; }
 @keyframes fl-grow { from { width: var(--from); } }
+/* 진행률 바 끝에서 따라다니는 불꽃 (바는 overflow를 자르지 않고, 채움 막대가 둥근 모서리를 스스로 가진다) */
+.fl-bar-flame { position: absolute; bottom: calc(100% - 3px); width: 16px; height: 19px; margin-left: -8px; overflow: visible; pointer-events: none; transform-origin: 50% 90%; animation: fl-bar-wobble 1.4s ease-in-out infinite; }
+.fl-bar .fl-bar-flame { bottom: calc(100% - 4px); width: 22px; height: 26px; margin-left: -11px; }
+.fl-bar-flame.move { animation: fl-grow-left 1s ease-out, fl-bar-wobble 1.4s ease-in-out infinite; }
+@keyframes fl-grow-left { from { left: var(--from); } }
+@keyframes fl-bar-wobble { 0%, 100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(6deg) scale(1.08, 1.12); } }
 
 /* 히어로 요약 수치 */
 .fl-stats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin: 18px 0 0; }
@@ -79,7 +85,7 @@
 .fl-rung em { color: var(--sub); font-size: 13px; font-style: normal; white-space: nowrap; }
 .fl-rung-right small { color: var(--hint); font-size: 11.5px; white-space: nowrap; }
 .fl-ladder li.current .fl-rung-right small { color: var(--flame); }
-.fl-rung-bar { height: 6px; margin: -2px 54px 8px 44px; overflow: hidden; border-radius: 3px; background: #f3ece5; }
+.fl-rung-bar { position: relative; height: 6px; margin: 6px 54px 8px 44px; border-radius: 3px; background: #f3ece5; }
 .fl-rung-bar div { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ea580c, #fbbf24); }
 .fl-ladder li.current em { color: var(--flame); font-weight: 700; }
 .fl-drop { display: inline-block; flex-shrink: 0; margin: 0 2px; transform-origin: 50% 90%; animation: fl-sway 2.6s ease-in-out infinite; }
@@ -188,12 +194,18 @@
 .fl-fuel .fl-note, .fl-fuel .fl-error { margin-top: -8px; }
 .fl-bottom { margin-top: auto; }
 .fl-outcome { text-align: center; }
-.fl-log-drop { font-size: 44px; animation: fl-drop .8s cubic-bezier(.3, 1.4, .5, 1); }
+/* 저축 연출: 장작이 떨어지고 불꽃이 커지며 불똥이 튄다 */
+.fl-burst { position: relative; width: 140px; height: 120px; margin: 0 auto; }
+.fl-burst-flame { position: absolute; bottom: 4px; left: 50%; width: 72px; height: 84px; margin-left: -36px; overflow: visible; transform-origin: 50% 95%; animation: fl-flare 1.3s cubic-bezier(.3, 1.4, .5, 1) .5s both; }
+.fl-burst-log { position: absolute; bottom: 0; left: 50%; width: 64px; margin-left: -32px; animation: fl-log-fall .6s cubic-bezier(.5, 0, .9, .6) both; }
+.fl-burst-spark { position: absolute; bottom: 52px; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 6px #f97316; opacity: 0; animation: fl-spark .8s ease-out both; }
+@keyframes fl-flare { 0% { transform: scale(.75); } 35% { transform: scale(1.4, 1.55); } 100% { transform: scale(1); } }
+@keyframes fl-log-fall { 0% { opacity: 0; transform: translateY(-90px) rotate(-30deg); } 20% { opacity: 1; } 85% { opacity: 1; transform: translateY(0) rotate(0); } 100% { opacity: 0; transform: translateY(6px) scale(.8); } }
+@keyframes fl-spark { 0% { opacity: 1; transform: translate(0, 0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.3); } }
 .fl-delta { display: block; margin-top: 4px; color: var(--flame); font-size: 24px; }
 .fl-outcome .fl-progress { margin-top: 18px; }
 .fl-month-total { margin: 16px 0 0; color: var(--sub); font-size: 14px; }
 .fl-month-total b { color: var(--text); }
-@keyframes fl-drop { from { transform: translateY(-60px) rotate(-20deg); opacity: 0; } }
 
 .fl-sheet-backdrop { position: fixed; z-index: 40; inset: 0; display: flex; align-items: flex-end; justify-content: center; background: rgba(28, 25, 23, .45); }
 .fl-sheet { width: 100%; max-width: 480px; padding: 24px 24px calc(20px + env(safe-area-inset-bottom)); border-radius: 28px 28px 0 0; background: #fff; }
@@ -208,7 +220,17 @@
 /* 단계 상승 */
 .su-screen { justify-content: space-between; min-height: 100dvh; padding-bottom: calc(112px + env(safe-area-inset-bottom)); color: #fff; background: radial-gradient(circle at 50% 35%, #4a2a14, var(--dark) 65%); text-align: center; }
 .su-body { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; }
-.su-art { padding-top: 24px; filter: drop-shadow(0 0 40px rgba(251, 146, 60, .35)); }
+.su-art { padding-top: 24px; filter: drop-shadow(0 0 40px rgba(251, 146, 60, .35)); animation: su-pop .9s cubic-bezier(.3, 1.5, .5, 1) both; }
+.su-screen h1 { animation: su-rise .6s ease-out .35s both; }
+/* 단계에 오르는 순간 번쩍이는 빛, 건물 쪽에서 솟아오르는 불씨 */
+.su-flash { position: fixed; z-index: 29; inset: 0; background: radial-gradient(circle at 50% 38%, rgba(255, 237, 213, .95), rgba(251, 146, 60, .5) 40%, transparent 70%); opacity: 0; pointer-events: none; }
+.fl-screen > .su-flash { animation: su-flash 1.1s ease-out both; }
+.su-embers { position: fixed; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; }
+.su-embers i { position: absolute; bottom: 34%; border-radius: 50%; opacity: 0; animation: su-ember 3s ease-out infinite; }
+@keyframes su-pop { 0% { transform: scale(.55); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes su-rise { from { transform: translateY(14px); opacity: 0; } }
+@keyframes su-flash { 0% { opacity: 0; } 18% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes su-ember { 0% { transform: translate(0, 0) scale(.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), var(--rise)) scale(.2); opacity: 0; } }
 .su-screen h1 { margin: 24px 0 8px; font-size: 24px; line-height: 1.35; }
 .su-next { width: 100%; margin-top: 24px; padding: 16px; border-radius: 18px; background: rgba(255, 255, 255, .08); color: #e7e5e4; font-size: 15px; }
 .su-next b { color: #fdba74; }
@@ -229,7 +251,10 @@
 @media (prefers-reduced-motion: reduce) {
   .fl-bar div { transition: none; }
   .fl-screen > *, .fl-hero::before { animation: none; }
-  .fl-log-drop, .fl-bar div.grow { animation: none; }
+  .fl-bar div.grow, .fl-burst-flame, .fl-bar-flame, .fl-bar-flame.move { animation: none; }
+  .fl-burst-log, .fl-burst-spark { display: none; }
+  .su-art, .su-screen h1 { animation: none; }
+  .su-flash, .su-embers { display: none; }
   .su-fireworks span { animation: none; opacity: 1; transform: translate(var(--dx), var(--dy)); }
 }
 @media (max-width: 340px) {
@@ -263,4 +288,23 @@
 .fl-screen > :nth-child(4) { animation-delay: .15s; }
 .fl-screen > :nth-child(n + 5) { animation-delay: .2s; }
 @keyframes fl-pop { from { translate: 0 12px; } }
-.fl-screen > .fl-sheet-backdrop, .fl-screen > .su-fireworks { animation: none; } /* 화면 전체를 덮는 고정 요소는 움직이지 않는다 */
+.fl-screen > .fl-sheet-backdrop, .fl-screen > .su-fireworks, .fl-screen > .su-embers { animation: none; } /* 화면 전체를 덮는 고정 요소는 움직이지 않는다 */
+
+/* 마스코트 '불이' */
+.mascot { display: block; overflow: visible; }
+.mascot-body { transform-box: fill-box; transform-origin: 50% 100%; }
+.mascot-outer { transform-box: fill-box; transform-origin: 50% 100%; }
+.mascot-eyes { transform-box: fill-box; transform-origin: 50% 50%; }
+.mascot.animate .mascot-body { animation: mascot-bob 2.4s ease-in-out infinite; }
+.mascot.animate .mascot-outer { animation: mascot-flicker 1.3s ease-in-out infinite; }
+.mascot.animate .mascot-eyes { animation: mascot-blink 4s infinite; }
+.mascot.animate .mascot-shadow { transform-box: fill-box; transform-origin: 50% 50%; animation: mascot-shadow 2.4s ease-in-out infinite; }
+.mascot.cheer.animate .mascot-body { animation-name: mascot-jump; animation-duration: .9s; }
+.mascot.sleepy.animate .mascot-body { animation-duration: 4s; }
+.mascot.sleepy.animate .mascot-outer { animation-duration: 3s; }
+@keyframes mascot-bob { 0%, 100% { transform: translateY(0) scale(1.02, .98); } 50% { transform: translateY(-5px) scale(.98, 1.03); } }
+@keyframes mascot-jump { 0%, 100% { transform: translateY(0) scale(1.06, .92); } 40% { transform: translateY(-16px) scale(.94, 1.08); } 70% { transform: translateY(0) scale(1.04, .95); } }
+@keyframes mascot-flicker { 0%, 100% { transform: scale(1, 1) skewX(0); } 50% { transform: scale(.98, 1.05) skewX(1.5deg); } }
+@keyframes mascot-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes mascot-shadow { 0%, 100% { transform: scale(1); opacity: .12; } 50% { transform: scale(.85); opacity: .07; } }
+@media (prefers-reduced-motion: reduce) { .mascot .mascot-body, .mascot .mascot-outer, .mascot .mascot-eyes, .mascot .mascot-shadow { animation: none !important; } }

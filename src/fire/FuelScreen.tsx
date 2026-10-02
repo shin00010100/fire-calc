@@ -4,6 +4,9 @@ import { calculateStages, progressToNext } from "../shared/calc/stages";
 import { STAGES } from "../shared/constants";
 import { comma, manwon, percent, ymMonth } from "../shared/format";
 import type { StageIndex } from "../shared/types";
+import { useCountUp } from "../shared/useCountUp";
+import BarFlame from "./BarFlame";
+import FuelBurst from "./FuelBurst";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
@@ -15,10 +18,13 @@ interface Outcome {
 }
 
 export default function FuelScreen() {
-  const { ready, input, nowYm, state, monthFuel, addFuelLog } = useFlameState();
+  const { ready, input, stages, nowYm, state, monthFuel, addFuelLog } = useFlameState();
   const [raw, setRaw] = useState("");   // 만원 단위
   const [error, setError] = useState("");
   const [outcome, setOutcome] = useState<Outcome | null>(null);
+
+  const shownAmount = useCountUp(outcome?.amount ?? 0, 800);
+  const shownMonth = useCountUp(monthFuel.total, 1000);
 
   useEffect(() => { if (ready && !input) navigate(ROUTES.input, { replace: true }); }, [ready, input]);
   if (!input) return null;
@@ -56,13 +62,13 @@ export default function FuelScreen() {
       <p className={error ? "fl-error" : "fl-note"}>{error || [raw ? manwon(Number(raw) * 10_000) : "", `${month}월에 저축한 금액 ${manwon(monthFuel.total)}`].filter(Boolean).join(" · ")}</p>
       <button className="fl-btn fl-bottom" onClick={submit}>저축하기</button>
     </> : <section className="fl-card fl-outcome" aria-live="polite">
-      <div className="fl-log-drop" aria-hidden="true">💰</div>
-      <strong className="fl-delta">저축 +{manwon(outcome.amount)}</strong>
+      <FuelBurst stage={outcome.stagedUp ?? stages?.stage ?? 1} />
+      <strong className="fl-delta">저축 +{manwon(shownAmount)}</strong>
       {outcome.target !== null && <div className="fl-progress light">
         <div className="fl-progress-head"><span>{STAGES[outcome.target].fire}까지</span><strong>{percent(outcome.toP)}</strong></div>
-        <div className="fl-bar"><div className="grow" style={{ width: `${outcome.toP * 100}%`, "--from": `${outcome.fromP * 100}%` } as CSSProperties} /></div>
+        <div className="fl-bar"><div className="grow" style={{ width: `${outcome.toP * 100}%`, "--from": `${outcome.fromP * 100}%` } as CSSProperties} /><BarFlame stage={outcome.target} pct={outcome.toP} from={outcome.fromP} /></div>
       </div>}
-      <p className="fl-month-total">{month}월에 저축한 금액 <b>{manwon(monthFuel.total)}</b> ({monthFuel.count}번)</p>
+      <p className="fl-month-total">{month}월에 저축한 금액 <b>{manwon(shownMonth)}</b> ({monthFuel.count}번)</p>
       {outcome.stagedUp !== null
         ? <button className="fl-btn" onClick={() => navigate(ROUTES.stageUp, { replace: true })}>{STAGES[outcome.stagedUp].fire} 점화 보기</button>
         : <button className="fl-btn" onClick={() => navigate(ROUTES.flame, { replace: true })}>불꽃으로 돌아가기</button>}

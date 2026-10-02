@@ -4,6 +4,7 @@ import { requiredAmount } from "../shared/calc/stages";
 import { STAGE_INDICES, STAGES } from "../shared/constants";
 import { age, eok, percent } from "../shared/format";
 import type { StageIndex, StageResult } from "../shared/types";
+import BarFlame from "./BarFlame";
 import FlameShape from "./FlameShape";
 import StagePopover from "./StagePopover";
 
@@ -60,7 +61,7 @@ export default function Ladder({ stages, ageYears, assets }: { stages: StageResu
           </div>
           <button className="fl-info" aria-label={`${m.fire} 단계 설명`} aria-expanded={open === s} aria-controls={open === s ? popId : undefined} onClick={() => setOpen(open === s ? null : s)}>i</button>
         </div>
-        {progress < 1 && <div className="fl-rung-bar" aria-hidden="true"><div style={{ width: `${progress * 100}%` }} /></div>}
+        {progress < 1 && <div className="fl-rung-bar" aria-hidden="true"><div style={{ width: `${progress * 100}%` }} /><BarFlame stage={s} pct={progress} /></div>}
         {open === s && <StagePopover id={popId} stage={s} required={need > 0 ? `${eok(need)} 이상 (목표 자산의 ${pct})` : undefined} />}
       </li>;
     })}
