@@ -18,7 +18,7 @@
 /* 어두운 히어로 카드 (.fl-hero와 동일) */
 .calc-hero { padding: 28px 20px 22px; border-radius: 30px; color: #fff; background: radial-gradient(circle at 50% 30%, #3b2a20, var(--dark) 70%); text-align: center; }
 .calc-badge { display: inline-block; padding: 6px 14px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 13px; font-weight: 700; }
-.calc-hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 0; }
+.calc-hero-stats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin: 18px 0 0; }
 .calc-hero-stats div { padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, .08); text-align: left; }
 .calc-hero-stats dt { color: #d6d3d1; font-size: 12px; }
 .calc-hero-stats dd { margin: 4px 0 0; color: #fff; font-size: 17px; font-weight: 700; }
@@ -53,12 +53,12 @@
 .calc-error { color: #dc2626; }
 .calc-box.fixed { justify-content: space-between; border-color: transparent; color: var(--sub); background: #f5f0eb; }
 .calc-box.fixed strong { color: var(--text); font-size: 18px; }
-.calc-styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.calc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .calc-styles button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 72px; padding: 8px 4px; border: 2px solid var(--field-line); border-radius: 18px; color: var(--sub); background: #fff; box-shadow: 0 3px 0 var(--field-line); cursor: pointer; transition: transform .08s, box-shadow .08s; }
 .calc-styles button:active { box-shadow: 0 1px 0 var(--field-line); transform: translateY(2px); }
 .calc-styles button .emo { margin: 0; font-size: 20px; font-style: normal; line-height: 1.1; }
-.calc-styles button strong { font-size: 15px; }
-.calc-styles button span { font-size: 13px; }
+.calc-styles button strong { font-size: 15px; white-space: nowrap; }
+.calc-styles button span { font-size: 13px; white-space: nowrap; }
 .calc-styles button.selected { border-color: var(--accent); color: var(--badge-text); background: #fff1e6; box-shadow: 0 3px 0 #fdba74; }
 .calc-styles button.selected strong { color: var(--accent); }
 /* 하단 탭(64px) 바로 위에 붙는 고정 버튼. #root가 overflow-x: hidden이라 sticky는 동작하지 않아 fixed로 둔다 */

@@ -21,6 +21,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: inherit;
+  /* 한글은 글자 중간이 아니라 단어 단위로 줄바꿈 (폰 폭·글자 크기가 달라도 덜 깨진다) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 #root {
@@ -71,6 +74,7 @@ body {
   color: #a8a29e;
   background: transparent;
   font-size: 12px;
+  white-space: nowrap;
   cursor: pointer;
 }
 .tab-bar button span { font-size: 22px; filter: grayscale(1); opacity: .6; }
