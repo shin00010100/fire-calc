@@ -4,17 +4,20 @@ import { ageAfter } from "../shared/calc/fire";
 import { requiredAmount } from "../shared/calc/stages";
 import { STAGES } from "../shared/constants";
 import Disclaimer from "../shared/Disclaimer";
-import { age, eok, manwon } from "../shared/format";
+import { age, eok, manwon, ymMonth } from "../shared/format";
+import AgeSheet from "./AgeSheet";
 import BuildingFire from "./BuildingFire";
 import FuelCard from "./FuelCard";
+import FuelHistory from "./FuelHistory";
 import Ladder from "./Ladder";
 import TotalAssetsSheet from "./TotalAssetsSheet";
 import { useFlameState } from "./useFlameState";
 import "./fire.css";
 
 export default function StageLadderScreen() {
-  const { ready, state, input, stages, monthFuel, setTotalAssets } = useFlameState();
+  const { ready, state, input, stages, nowYm, monthFuel, setTotalAssets, setCurrentAge } = useFlameState();
   const [editing, setEditing] = useState(false);
+  const [editingAge, setEditingAge] = useState(false);
 
   useEffect(() => {
     if (!ready) return;
@@ -39,14 +42,15 @@ export default function StageLadderScreen() {
       <h1>{meta.fireStage}</h1>
       <p className="fl-summary">{meta.summary}</p>
       <dl className="fl-stats">
-        <div><dt>현재 나이</dt><dd>만 {Math.floor(input.age)}세</dd></div>
+        <div><dt>현재 나이<button className="fl-edit" onClick={() => setEditingAge(true)} aria-label="현재 나이 수정">수정</button></dt><dd>만 {Math.floor(input.age)}세</dd></div>
         <div><dt>FIRE 달성 나이</dt><dd>{fireAge}</dd></div>
         <div><dt>총 저축 금액<button className="fl-edit" onClick={() => setEditing(true)} aria-label="총 저축 금액 수정">수정</button></dt><dd>{manwon(input.assets)}</dd></div>
         <div><dt>다음 단계 목표 금액</dt><dd>{next ? eok(nextNeed) : "모든 단계 달성"}{next && <small>{next.fire} · {Math.ceil(nextRatio * 100 - 1e-9)}%</small>}</dd></div>
       </dl>
     </section>
 
-    <FuelCard total={monthFuel.total} count={monthFuel.count} />
+    <FuelCard month={ymMonth(nowYm)} total={monthFuel.total} count={monthFuel.count} />
+    <FuelHistory logs={state.logs} />
 
     <section className="fl-card">
       <h2><span className="emo" aria-hidden="true">🔥</span>파이어 단계</h2>
@@ -63,5 +67,6 @@ export default function StageLadderScreen() {
     <Disclaimer />
 
     {editing && <TotalAssetsSheet current={input.assets} onSave={setTotalAssets} onClose={() => setEditing(false)} />}
+    {editingAge && <AgeSheet current={Math.floor(input.age)} onSave={setCurrentAge} onClose={() => setEditingAge(false)} />}
   </main>;
 }

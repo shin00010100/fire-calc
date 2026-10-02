@@ -52,6 +52,18 @@
 .fl-big { display: block; margin-top: 8px; font-size: 28px; letter-spacing: -.5px; }
 .fl-big-sub { margin: 4px 0 0; color: var(--sub); font-size: 15px; }
 
+/* 과거 저축 상세 내역 */
+.fl-history-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0; border: 0; background: none; color: var(--text); font-size: 15px; font-weight: 700; cursor: pointer; }
+.fl-chevron { display: inline-block; color: var(--sub); font-size: 13px; transition: transform .2s; }
+.fl-chevron.up { transform: rotate(180deg); }
+.fl-history-list { margin: 16px 0 0; padding: 0; list-style: none; }
+.fl-history-list > li + li { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.fl-history-month { display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--sub); font-size: 13.5px; font-weight: 700; }
+.fl-history-month strong { color: var(--text); }
+.fl-history-entries { margin: 0; padding: 0; list-style: none; }
+.fl-history-entries li { display: flex; justify-content: space-between; padding: 6px 0; color: var(--sub); font-size: 13.5px; }
+.fl-history-entries li span:last-child { color: var(--text); font-weight: 600; }
+
 /* 사다리 */
 .fl-ladder { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .fl-ladder li { position: relative; }
