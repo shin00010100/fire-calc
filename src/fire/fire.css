@@ -193,12 +193,13 @@
 .fl-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
 /* 단계 상승 */
-.su-screen { justify-content: space-between; padding-bottom: 104px; color: #fff; background: radial-gradient(circle at 50% 35%, #4a2a14, var(--dark) 65%); text-align: center; }
+.su-screen { justify-content: space-between; min-height: 100dvh; padding-bottom: calc(112px + env(safe-area-inset-bottom)); color: #fff; background: radial-gradient(circle at 50% 35%, #4a2a14, var(--dark) 65%); text-align: center; }
 .su-body { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; }
-.su-art { padding-top: 70px; filter: drop-shadow(0 0 40px rgba(251, 146, 60, .35)); }
+.su-art { padding-top: 24px; filter: drop-shadow(0 0 40px rgba(251, 146, 60, .35)); }
 .su-screen h1 { margin: 24px 0 8px; font-size: 24px; line-height: 1.35; }
 .su-next { width: 100%; margin-top: 24px; padding: 16px; border-radius: 18px; background: rgba(255, 255, 255, .08); color: #e7e5e4; font-size: 15px; }
 .su-next b { color: #fdba74; }
+@media (max-height: 800px) { .su-screen h1 { margin-top: 12px; font-size: 22px; } .su-next { margin-top: 14px; padding: 12px; } .su-screen .fl-btn { margin-top: 8px; } }
 .su-fireworks { position: fixed; z-index: 30; inset: 0; pointer-events: none; }
 .su-fireworks span { position: absolute; width: 8px; height: 8px; border-radius: 50%; opacity: 0; animation: bf-burst 1.6s ease-out both; }
 

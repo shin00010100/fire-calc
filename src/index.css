@@ -77,8 +77,11 @@ body {
 .tab-bar button.active { color: #ea580c; font-weight: 700; }
 .tab-bar button span { padding: 2px 14px; border-radius: 999px; transition: background .2s; }
 .tab-bar button.active span { filter: none; opacity: 1; background: #ffedd5; animation: tab-bounce .3s ease-out; }
+.tab-flame { display: block; width: 22px; height: 26px; overflow: visible; transform-origin: 50% 90%; }
+.tab-bar button.active .tab-flame { animation: fl-sway 2.2s ease-in-out infinite; }
+.tab-bar button:not(.active) .fl-drop-body, .tab-bar button:not(.active) .fl-drop-face { animation: none; }
 @keyframes tab-bounce { 50% { scale: 1.15; } }
-@media (prefers-reduced-motion: reduce) { .tab-bar button.active span { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .tab-bar button.active span, .tab-bar button.active .tab-flame { animation: none; } }
 .tab-bar button:disabled { opacity: .35; cursor: default; }
 
 .toast {
