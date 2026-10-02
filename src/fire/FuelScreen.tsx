@@ -43,7 +43,7 @@ export default function FuelScreen() {
   const again = () => { setOutcome(null); setRaw(""); setError(""); };
 
   return <main className="fl-screen fl-fuel">
-    <h1 className="fl-title">저축을 기록해요</h1>
+    <h1 className="fl-title"><span className="emo" aria-hidden="true">💰</span>저축을 기록해요</h1>
     <p className="fl-lead">저축할 때마다 총 저축 금액이 늘어나고 불꽃이 다시 계산돼요. 여러 번 기록할 수 있어요.</p>
 
     {!outcome ? <>

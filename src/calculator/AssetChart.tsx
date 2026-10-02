@@ -29,7 +29,7 @@ export default function AssetChart({ result, startAge }: { result: FireResult; s
   const label = fire ? `자산 성장 그래프. 만 ${startAge}세 ${manwon(series[0].assets)}에서 ${age(fire.years, fire.months)}에 목표 ${eok(T)} 도달` : `자산 성장 그래프. 100년 안에 목표 ${eok(T)}에 도달하지 않아요`;
 
   return <section className="calc-chart">
-    <h2>자산 성장 그래프</h2>
+    <h2><span className="emo" aria-hidden="true">📈</span>자산 성장 그래프</h2>
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} onPointerDown={onPointer} onPointerMove={(e) => (e.buttons || e.pointerType === "mouse") && onPointer(e)} onPointerLeave={() => setHover(null)}>
       {[0.25, 0.5, 0.75, 1].map((f) => <line key={f} x1={L} x2={R} y1={BOTTOM - f * (BOTTOM - TOP)} y2={BOTTOM - f * (BOTTOM - TOP)} className="grid" />)}
       <line x1={L} x2={R} y1={y(T)} y2={y(T)} className="target" />
