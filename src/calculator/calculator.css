@@ -24,10 +24,17 @@
 
 /* 메인 */
 .calc-main { justify-content: space-between; }
-.calc-main .calc-hero { margin-top: 12vh; padding: 36px 22px 28px; }
-.calc-logo { display: grid; width: 76px; height: 76px; margin: 0 auto 18px; place-items: center; border-radius: 50%; background: radial-gradient(circle, rgba(251, 146, 60, .45), rgba(234, 88, 12, .15) 70%); font-size: 40px; }
+.calc-main .calc-hero { margin-top: 4vh; padding: 28px 22px 28px; }
+/* 불꽃놀이(6단계) 그림. 폭죽이 그림 박스 위로 넘치므로 위쪽 여백을 둔다 */
+.calc-main-art { display: flex; justify-content: center; margin: 0 auto 18px; padding-top: 30px; }
+/* 화면이 낮은 폰(SE 등)에서도 시작하기 버튼이 첫 화면에 보이도록 그림을 줄인다 */
+@media (max-height: 700px) {
+  .calc-main .calc-hero { margin-top: 0; padding-top: 16px; }
+  .calc-main-art { margin-bottom: 10px; padding-top: 22px; }
+  .calc-main-art .bf-root { zoom: .75; }
+}
 .calc-main h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: -.6px; }
-.calc-main .calc-tagline { margin: 0; color: #fdba74; font-size: 16px; font-weight: 600; }
+.calc-main .calc-tagline { margin: 0; color: #fdba74; font-size: 16px; font-weight: 600; word-break: keep-all; }
 .calc-main .calc-purpose { margin: 16px 0 0; color: #d6d3d1; font-size: 14px; line-height: 1.65; word-break: keep-all; }
 
 /* 입력 */
