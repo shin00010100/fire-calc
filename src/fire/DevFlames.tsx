@@ -13,7 +13,7 @@ export default function DevFlames() {
         <figcaption><span>{s}단계</span><strong>{STAGES[s].fire}</strong><small>{STAGES[s].fireStage}</small><em>{STAGES[s].summary}</em></figcaption>
       </figure>)}
     </div>
-    <h1>마스코트 불이</h1>
+    <h1>마스코트 파이</h1>
     <div className="fl-dev-row">
       {(["happy", "cheer", "sleepy"] as const).map((m) => <figure key={m}><Mascot size={150} mood={m} /><figcaption><strong>{m}</strong></figcaption></figure>)}
     </div>

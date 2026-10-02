@@ -2,10 +2,10 @@ import "./fire.css";
 
 export type MascotMood = "happy" | "cheer" | "sleepy";
 
-/** 불꽃 마스코트 '불이'. mood로 표정과 움직임이 달라지고, animate=false면 가만히 있는다. */
+/** 불꽃 마스코트 '파이'. mood로 표정과 움직임이 달라지고, animate=false면 가만히 있는다. */
 export default function Mascot({ size = 120, mood = "happy", animate = true }: { size?: number; mood?: MascotMood; animate?: boolean }) {
   const eyeY = 98;
-  return <svg className={`mascot ${mood}${animate ? " animate" : ""}`} viewBox="0 0 120 140" width={size} height={size * (140 / 120)} role="img" aria-label="불꽃 마스코트 불이">
+  return <svg className={`mascot ${mood}${animate ? " animate" : ""}`} viewBox="0 0 120 140" width={size} height={size * (140 / 120)} role="img" aria-label="불꽃 마스코트 파이">
     <ellipse className="mascot-shadow" cx="60" cy="136" rx="30" ry="4" fill="#1c1917" opacity=".12" />
     <g className="mascot-body">
       <path className="mascot-outer" fill="#d4521a" d="M62 6C66 26 74 34 86 48C98 62 104 78 104 94C104 120 86 134 60 134C34 134 16 120 16 94C16 76 24 62 36 50C38 58 42 62 46 62C46 44 52 22 62 6Z" />

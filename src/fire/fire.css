@@ -290,7 +290,7 @@
 @keyframes fl-pop { from { translate: 0 12px; } }
 .fl-screen > .fl-sheet-backdrop, .fl-screen > .su-fireworks, .fl-screen > .su-embers { animation: none; } /* 화면 전체를 덮는 고정 요소는 움직이지 않는다 */
 
-/* 마스코트 '불이' */
+/* 마스코트 '파이' */
 .mascot { display: block; overflow: visible; }
 .mascot-body { transform-box: fill-box; transform-origin: 50% 100%; }
 .mascot-outer { transform-box: fill-box; transform-origin: 50% 100%; }
