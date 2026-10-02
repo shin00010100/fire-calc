@@ -16,7 +16,7 @@ function AgeCount({ startAge, animMonths, targetMonths }: { startAge: number; an
   const yearDigits = Math.max(String(fin.years).length, String(Math.floor(startAge)).length);
   // 끝나면 개월 칸 폭이 실제 자릿수로 줄어든다 (한 번에 튀지 않게 transition)
   const monthWidth = done ? String(fin.months).length : 2;
-  return <>만 <span className="cu-slot" style={{ width: `${yearDigits}ch` }}>{v.years}</span>세 <span className="cu-slot" style={{ width: `${monthWidth}ch` }}>{v.months}</span>개월</>;
+  return <>만 <span className="cu-slot" style={{ minWidth: `${yearDigits}ch` }}>{v.years}</span>세 <span className="cu-slot" style={{ minWidth: `${monthWidth}ch` }}>{v.months}</span>개월</>;
 }
 
 export default function ResultScreen() {

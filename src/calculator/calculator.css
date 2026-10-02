@@ -123,5 +123,5 @@
 }
 
 /* 카운트업 중 자리 폭 고정 (숫자 폭이 같은 숫자 모양을 쓰고, 오른쪽 정렬로 뒤 글자가 흔들리지 않게) */
-.cu-slot { display: inline-block; font-variant-numeric: tabular-nums; text-align: right; transition: width .25s ease-out; }
+.cu-slot { display: inline-block; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; overflow-wrap: normal; transition: min-width .25s ease-out; }
 .calc-result-age, .calc-hero-stats dd { font-variant-numeric: tabular-nums; }
