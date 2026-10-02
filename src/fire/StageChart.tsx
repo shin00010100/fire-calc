@@ -82,6 +82,14 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
   const full = (r: Reach) => (r[5] === null ? "용광로에 100년 안에 닿지 않아요" : `용광로 ${when(a.age, r[5])}`);
   const label = `나이별 자산 곡선 비교 그래프. A 기존값 ${full(reachA)}${reachB ? `, B 실험값 ${full(reachB)}` : ""}`;
   const hoverAge = hover !== null ? ageAfter(a.age, hover) : null;
+  // 터치한 나이의 금액 점. 값이 그래프 위쪽(yMax)을 넘으면 svg가 overflow: visible이라 범례·제목까지 올라가므로,
+  // 원 대신 그래프 위 가장자리에 ▲를 그린다(정확한 금액은 아래 안내 줄에 나온다)
+  const hoverMark = (v: number, color: string) => {
+    const cx = x(hover ?? 0);
+    return y(v) >= TOP
+      ? <circle cx={cx} cy={y(v)} r="4" fill={color} className="sc-hdot" />
+      : <path d={`M${cx} ${TOP - 5} l5 8 h-10 z`} fill={color} className="sc-hdot" strokeLinejoin="round" />;
+  };
 
   return <figure className="sc">
     <figcaption>단계별 불꽃이 켜지는 나이</figcaption>
@@ -121,8 +129,8 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
 
       {hover !== null && <g>
         <line x1={x(hover)} x2={x(hover)} y1={TOP} y2={BOT} className="sc-cursor" />
-        <circle cx={x(hover)} cy={y(sa[hover])} r="4" fill={A_COLOR} className="sc-hdot" />
-        {sb && <circle cx={x(hover)} cy={y(sb[hover])} r="4" fill={B_COLOR} className="sc-hdot" />}
+        {hoverMark(sa[hover], A_COLOR)}
+        {sb && hoverMark(sb[hover], B_COLOR)}
       </g>}
     </svg>
 
