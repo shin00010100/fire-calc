@@ -37,7 +37,7 @@ export default function StageUpScreen() {
   return <main className="fl-screen su-screen">
     {stages.stage === 6 && fireworks && <Fireworks />}
     <div className="su-body">
-      <div className="su-art"><BuildingFire stage={stages.stage} size={240} /></div>
+      <div className="su-art"><BuildingFire stage={stages.stage} size={window.innerHeight < 800 ? 190 : 240} /></div>
       <h1>{meta.fire} 점화! {meta.fireStage} 달성</h1>
       <p className="fl-summary">{meta.summary}</p>
       <div className="su-next">
