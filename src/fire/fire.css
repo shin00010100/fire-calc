@@ -75,8 +75,8 @@
 .fl-ladder li:nth-child(3n) .fl-drop { animation-delay: -1.6s; }
 .fl-ladder li.future .fl-drop { opacity: .75; animation-duration: 3.6s; }
 .fl-drop.is-current { animation: fl-bounce 1.2s ease-in-out infinite; }
-.fl-drop-body { transform-origin: 50% 100%; animation: fl-flicker 1.4s ease-in-out infinite; }
-.fl-drop-face { transform-origin: 50% 80%; animation: fl-blink 4s infinite; }
+.fl-drop-body { transform-box: fill-box; transform-origin: 50% 100%; animation: fl-flicker 1.4s ease-in-out infinite; }
+.fl-drop-face { transform-box: fill-box; transform-origin: 50% 50%; animation: fl-blink 4s infinite; }
 @keyframes fl-sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg) scale(1.05); } }
 @keyframes fl-bounce { 0%, 100% { transform: translateY(0) scale(1, 1); } 40% { transform: translateY(-4px) scale(.95, 1.08); } 70% { transform: translateY(0) scale(1.08, .92); } }
 @keyframes fl-flicker { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(.96, 1.06); } }
@@ -161,7 +161,7 @@
 .sc-table .a { color: var(--ca); }
 .sc-table .b { color: var(--cb); font-weight: 700; }
 .sc-table small { display: block; font-size: 12px; font-weight: 600; }
-.sc-num { display: inline-grid; width: 18px; height: 18px; margin-right: 6px; place-items: center; border-radius: 50%; color: var(--badge-text); background: var(--badge-bg); font-size: 11px; font-style: normal; font-weight: 800; }
+
 
 /* 장작 넣기 */
 .fl-title { margin: 0; font-size: 24px; }
