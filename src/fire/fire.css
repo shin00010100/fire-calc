@@ -1,7 +1,7 @@
 .fl-screen {
   --flame: #ea580c; --flame-hover: #c2410c; --flame-soft: #fff7ed; --badge-bg: #ffedd5; --badge-text: #9a3412;
   --text: #1c1917; --sub: #57534e; --hint: #a8a29e; --dark: #1c1917; --line: #f0e6dc;
-  display: flex; flex-direction: column; gap: 16px; min-height: 100vh; padding: 16px 24px 104px; color: var(--text); background: transparent;
+  display: flex; flex-direction: column; gap: 16px; min-height: 100dvh; padding: 16px 24px calc(104px + env(safe-area-inset-bottom)); color: var(--text); background: transparent;
 }
 .fl-screen h2 { margin: 0; font-size: 18px; }
 .fl-sub { margin: 4px 0 14px; color: var(--sub); font-size: 13px; }
