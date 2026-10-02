@@ -2,23 +2,24 @@
 .calc-screen {
   --accent: #ea580c; --accent-hover: #c2410c; --soft: #fff7ed; --badge-bg: #ffedd5; --badge-text: #9a3412;
   --text: #1c1917; --sub: #57534e; --hint: #a8a29e; --dark: #1c1917; --line: #f0e6dc; --field-line: #e7ddd3;
-  display: flex; flex-direction: column; gap: 16px; min-height: 100vh; padding: 16px 24px 104px; color: var(--text); background: var(--soft);
+  display: flex; flex-direction: column; gap: 16px; min-height: 100vh; padding: 16px 24px 104px; color: var(--text); background: transparent;
 }
 .calc-title { margin: 8px 0 0; font-size: 24px; letter-spacing: -.5px; }
 
-.calc-primary, .calc-secondary { width: 100%; min-height: 52px; border: 0; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; }
-.calc-primary { color: #fff; background: var(--accent); }
+.calc-primary, .calc-secondary { width: 100%; min-height: 52px; border: 0; border-radius: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform .08s, box-shadow .08s; }
+.calc-primary { color: #fff; background: var(--accent); box-shadow: 0 4px 0 #c2410c; }
 .calc-primary:hover { background: var(--accent-hover); }
-.calc-secondary { color: var(--sub); background: #f5f0eb; }
+.calc-secondary { color: var(--sub); background: #f5f0eb; box-shadow: 0 3px 0 #e7ddd3; }
 .calc-secondary:hover { background: #ece4dc; }
-.calc-primary:active, .calc-secondary:active { transform: scale(.98); }
+.calc-primary:active { box-shadow: 0 1px 0 #c2410c; transform: translateY(3px); }
+.calc-secondary:active { box-shadow: 0 1px 0 #e7ddd3; transform: translateY(2px); }
 .calc-actions { display: flex; flex-direction: column; gap: 10px; }
 
 /* 어두운 히어로 카드 (.fl-hero와 동일) */
-.calc-hero { padding: 28px 20px 22px; border-radius: 24px; color: #fff; background: radial-gradient(circle at 50% 30%, #3b2a20, var(--dark) 70%); text-align: center; }
-.calc-badge { display: inline-block; padding: 5px 12px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 13px; font-weight: 700; }
+.calc-hero { padding: 28px 20px 22px; border-radius: 30px; color: #fff; background: radial-gradient(circle at 50% 30%, #3b2a20, var(--dark) 70%); text-align: center; }
+.calc-badge { display: inline-block; padding: 6px 14px; border-radius: 999px; color: var(--badge-text); background: var(--badge-bg); font-size: 13px; font-weight: 700; }
 .calc-hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 0; }
-.calc-hero-stats div { padding: 12px; border-radius: 12px; background: rgba(255, 255, 255, .08); text-align: left; }
+.calc-hero-stats div { padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, .08); text-align: left; }
 .calc-hero-stats dt { color: #d6d3d1; font-size: 12px; }
 .calc-hero-stats dd { margin: 4px 0 0; color: #fff; font-size: 17px; font-weight: 700; }
 
@@ -39,10 +40,10 @@
 
 /* 입력 */
 .calc-lead { margin: -8px 0 0; color: var(--sub); font-size: 14px; }
-.calc-form { display: flex; flex-direction: column; gap: 22px; padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }
+.calc-form { display: flex; flex-direction: column; gap: 22px; padding: 20px; border: 1px solid #f6e3d3; border-radius: 26px; background: #fff; box-shadow: 0 6px 18px rgba(234, 88, 12, .08); }
 .calc-field label, .calc-label { display: block; margin-bottom: 8px; color: var(--text); font-size: 14px; font-weight: 600; }
-.calc-box { display: flex; align-items: center; height: 52px; padding: 0 14px; border: 2px solid var(--field-line); border-radius: 12px; background: #fff; }
-.calc-box:focus-within { border-color: var(--accent); }
+.calc-box { display: flex; align-items: center; height: 52px; padding: 0 14px; border: 2px solid var(--field-line); border-radius: 16px; background: #fffbf7; transition: box-shadow .15s; }
+.calc-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px #ffedd5; }
 .calc-box.error { border-color: #dc2626; }
 .calc-box input { flex: 1; min-width: 0; border: 0; outline: none; color: var(--text); background: transparent; font-size: 18px; font-weight: 700; text-align: right; }
 .calc-box span { margin-left: 6px; color: var(--sub); font-size: 15px; }
@@ -52,13 +53,15 @@
 .calc-box.fixed { justify-content: space-between; border-color: transparent; color: var(--sub); background: #f5f0eb; }
 .calc-box.fixed strong { color: var(--text); font-size: 18px; }
 .calc-styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.calc-styles button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 8px 4px; border: 2px solid var(--field-line); border-radius: 12px; color: var(--sub); background: #fff; cursor: pointer; }
+.calc-styles button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 72px; padding: 8px 4px; border: 2px solid var(--field-line); border-radius: 18px; color: var(--sub); background: #fff; box-shadow: 0 3px 0 var(--field-line); cursor: pointer; transition: transform .08s, box-shadow .08s; }
+.calc-styles button:active { box-shadow: 0 1px 0 var(--field-line); transform: translateY(2px); }
+.calc-styles button .emo { margin: 0; font-size: 20px; font-style: normal; line-height: 1.1; }
 .calc-styles button strong { font-size: 15px; }
 .calc-styles button span { font-size: 13px; }
-.calc-styles button.selected { border-color: var(--accent); color: var(--badge-text); background: var(--soft); }
+.calc-styles button.selected { border-color: var(--accent); color: var(--badge-text); background: #fff1e6; box-shadow: 0 3px 0 #fdba74; }
 .calc-styles button.selected strong { color: var(--accent); }
 /* 하단 탭(64px) 바로 위에 붙는 고정 버튼. #root가 overflow-x: hidden이라 sticky는 동작하지 않아 fixed로 둔다 */
-.calc-bottom { position: fixed; z-index: 10; bottom: calc(64px + env(safe-area-inset-bottom)); left: 50%; width: 100%; max-width: 480px; padding: 12px 24px; background: linear-gradient(rgba(255, 247, 237, 0), var(--soft) 30%); transform: translateX(-50%); }
+.calc-bottom { position: fixed; z-index: 10; bottom: calc(64px + env(safe-area-inset-bottom)); left: 50%; width: 100%; max-width: 480px; padding: 12px 24px; background: linear-gradient(rgba(255, 236, 224, 0), #ffece0 30%); transform: translateX(-50%); }
 .calc-form { margin-bottom: 76px; } /* 고정 버튼에 마지막 필드가 가리지 않게 */
 
 /* 결과 */
@@ -66,7 +69,7 @@
 .calc-result-age.small { font-size: 24px; }
 .calc-hero .calc-result-sub { margin: 0; color: #d6d3d1; font-size: 14px; line-height: 1.5; word-break: keep-all; }
 
-.calc-chart { padding: 20px 16px 14px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }
+.calc-chart { padding: 20px 16px 14px; border: 1px solid #f6e3d3; border-radius: 26px; background: #fff; box-shadow: 0 6px 18px rgba(234, 88, 12, .08); }
 .calc-chart h2 { margin: 0 0 8px; font-size: 18px; }
 .calc-chart svg { display: block; width: 100%; overflow: visible; touch-action: pan-y; cursor: crosshair; }
 .calc-chart .grid { stroke: #f3ece5; }
@@ -88,4 +91,31 @@
   .calc-form { padding: 16px; }
   .calc-bottom { padding-right: 16px; padding-left: 16px; }
   .calc-result-age { font-size: 30px; }
+}
+
+/* ── 말랑 파스텔 장식 (fire.css와 같은 값) ───────────── */
+.calc-screen .emo { margin-right: 6px; }
+.calc-hero { position: relative; isolation: isolate; }
+.calc-hero > * { position: relative; }
+.calc-hero::before {
+  position: absolute; z-index: -1; inset: 0; border-radius: inherit; pointer-events: none; content: "";
+  background:
+    radial-gradient(1.6px 1.6px at 12% 18%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 85% 14%, #fde68a 50%, transparent 52%),
+    radial-gradient(1.4px 1.4px at 72% 32%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 24% 42%, #fde68a 50%, transparent 52%),
+    radial-gradient(1.6px 1.6px at 90% 52%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 8% 64%, #fff 50%, transparent 52%),
+    radial-gradient(1.4px 1.4px at 58% 8%, #fde68a 50%, transparent 52%);
+  animation: calc-twinkle 3s ease-in-out infinite alternate;
+}
+@keyframes calc-twinkle { from { opacity: .35; } to { opacity: 1; } }
+.calc-screen > * { animation: calc-pop .4s ease-out both; }
+.calc-screen > :nth-child(2) { animation-delay: .05s; }
+.calc-screen > :nth-child(3) { animation-delay: .1s; }
+.calc-screen > :nth-child(n + 4) { animation-delay: .15s; }
+@keyframes calc-pop { from { translate: 0 12px; } }
+.calc-screen > .calc-bottom { animation: none; } /* 탭 위 고정 버튼은 움직이지 않는다 */
+@media (prefers-reduced-motion: reduce) {
+  .calc-screen > *, .calc-hero::before { animation: none; }
 }

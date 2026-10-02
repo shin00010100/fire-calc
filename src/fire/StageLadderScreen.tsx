@@ -49,14 +49,14 @@ export default function StageLadderScreen() {
     <FuelCard total={monthFuel.total} count={monthFuel.count} />
 
     <section className="fl-card">
-      <h2>파이어 단계</h2>
+      <h2><span className="emo" aria-hidden="true">🔥</span>파이어 단계</h2>
       <p className="fl-sub">i를 누르면 단계의 정확한 의미를 볼 수 있어요</p>
       <p className="fl-sub tight">이름 옆 %는 그 단계에 필요한 목표 자산 비율이고, 달성률은 지금 내 자산이 그 단계 금액의 몇 %인지예요.</p>
       <Ladder stages={stages} ageYears={input.age} assets={input.assets} />
     </section>
 
     <section className="fl-card">
-      <h2>불 키우기 실험</h2>
+      <h2><span className="emo" aria-hidden="true">🧪</span>불 키우기 실험</h2>
       <p className="fl-sub">투자금·수익률·생활비 같은 값을 바꿔 입력하고, 지금 계획(A)과 바꾼 값(B)의 시뮬레이션 결과를 비교해 보세요.</p>
       <button className="fl-btn" onClick={() => navigate(ROUTES.experiment)}>실험하러 가기</button>
     </section>

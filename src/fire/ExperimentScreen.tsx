@@ -86,7 +86,7 @@ function Experiment({ a, onApply }: { a: FireInput; onApply: (input: FireInput) 
   };
 
   return <main className="fl-screen fl-exp">
-    <h1 className="fl-title">불 키우기 실험</h1>
+    <h1 className="fl-title"><span className="emo" aria-hidden="true">🧪</span>불 키우기 실험</h1>
     <p className="fl-lead">값을 바꿔 입력하면, 지금 계획(A 기존값)과 바꾼 값(B 실험값)의 시뮬레이션 결과를 비교해 드려요.</p>
 
     <section className="fl-card">

@@ -4,7 +4,7 @@
   color-scheme: light;
   background: #ffffff;
 }
-:root[data-theme="flame"] { background: #fff7ed; }
+:root[data-theme="flame"] { background: #fff7ed linear-gradient(180deg, #fff7ed 0%, #ffe8d9 100%) fixed; }
 
 button,
 input {
@@ -53,8 +53,10 @@ body {
   max-width: 480px;
   height: calc(64px + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
-  border-top: 1px solid #f0e6dc;
+  border-top: 1px solid #f6e3d3;
+  border-radius: 22px 22px 0 0;
   background: rgba(255, 255, 255, .96);
+  box-shadow: 0 -4px 16px rgba(234, 88, 12, .08);
   transform: translateX(-50%);
   backdrop-filter: blur(12px);
 }
@@ -73,7 +75,10 @@ body {
 }
 .tab-bar button span { font-size: 22px; filter: grayscale(1); opacity: .6; }
 .tab-bar button.active { color: #ea580c; font-weight: 700; }
-.tab-bar button.active span { filter: none; opacity: 1; }
+.tab-bar button span { padding: 2px 14px; border-radius: 999px; transition: background .2s; }
+.tab-bar button.active span { filter: none; opacity: 1; background: #ffedd5; animation: tab-bounce .3s ease-out; }
+@keyframes tab-bounce { 50% { scale: 1.15; } }
+@media (prefers-reduced-motion: reduce) { .tab-bar button.active span { animation: none; } }
 .tab-bar button:disabled { opacity: .35; cursor: default; }
 
 .toast {
