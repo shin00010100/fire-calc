@@ -5,6 +5,8 @@ import { STAGES } from "../shared/constants";
 import { age, duration, manwon } from "../shared/format";
 import type { FireInput, StageIndex } from "../shared/types";
 import { ageTickStep, amountLabel, amountTicks, spreadLabels } from "./chartMath";
+import FlameShape from "./FlameShape";
+import { FlameDrop } from "./Ladder";
 
 type Reach = Record<StageIndex, number | null>;
 const ROWS: StageIndex[] = [1, 2, 3, 4, 5, 6];       // 불씨~불꽃놀이
@@ -100,7 +102,8 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
       {bLines.map((l) => <line key={`b${l.s}`} x1={L} x2={R} y1={y(l.v)} y2={y(l.v)} stroke={B_COLOR} className="sc-bline" />)}
       {lines.map((l, i) => <g key={l.s}>
         <line x1={L} x2={R} y1={y(l.v)} y2={y(l.v)} className="sc-line" />
-        <text x={R + 7} y={labelY[i] + 3.5} className="sc-stage"><tspan className="no">{l.s}</tspan> {STAGES[l.s].fire}</text>
+        <g transform={`translate(${R + 6} ${labelY[i] - 5.5}) scale(.46)`}><FlameShape stage={l.s} /></g>
+        <text x={R + 19} y={labelY[i] + 3.5} className="sc-stage">{STAGES[l.s].fire}</text>
       </g>)}
 
       <g clipPath="url(#sc-clip)">
@@ -109,8 +112,7 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
       </g>
 
       {[...aDots, ...bDots].map((d) => <g key={`${d.color}${d.s}`} transform={`translate(${d.cx.toFixed(1)} ${d.cy.toFixed(1)})`}>
-        <circle r="7" fill="#fff" stroke={d.color} strokeWidth="2" />
-        <text y="3.4" textAnchor="middle" fill={d.color} className="sc-dot">{d.s}</text>
+        <g transform="translate(-8.5 -9.8) scale(.72)"><FlameShape stage={d.s} outline={d.color} /></g>
       </g>)}
 
       {hover !== null && <g>
@@ -123,14 +125,14 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
     <p className="sc-tip" aria-live="polite">
       {hover !== null && hoverAge ? <><b>{age(hoverAge.years, hoverAge.months)}</b> · A <b className="a">{manwon(sa[hover])}</b>{sb && <> · B <b className="b">{manwon(sb[hover])}</b></>}</> : "그래프를 누르면 나이별 예상 금액을 보여줘요"}
     </p>
-    <p className="sc-note">원 안의 숫자는 단계예요. 곡선이 해당 단계의 금액선에 닿는 지점이 그 불꽃이 켜지는 때예요. 왼쪽 끝은 지금(만 {Math.floor(a.age)}세)이에요.</p>
+    <p className="sc-note">곡선 위의 불꽃은 단계예요. 곡선이 해당 단계의 금액선에 닿는 지점이 그 불꽃이 켜지는 때예요. 왼쪽 끝은 지금(만 {Math.floor(a.age)}세)이에요.</p>
 
     <table className="sc-table">
       <caption>단계별 도달 나이 (정확한 값)</caption>
       <thead><tr><th scope="col">단계</th><th scope="col" className="a">A 기존값</th>{reachB && <th scope="col" className="b">B 실험값</th>}</tr></thead>
       <tbody>
         {ROWS.map((s) => <tr key={s}>
-          <th scope="row"><i className="sc-num">{s}</i>{STAGES[s].fire}</th>
+          <th scope="row"><FlameDrop stage={s} size={14} />{STAGES[s].fire}</th>
           <td>{when(a.age, reachA[s])}</td>
           {reachB && <td className="b">{when(a.age, reachB[s])}{delta(reachA[s], reachB[s]) && <small>{delta(reachA[s], reachB[s])}</small>}</td>}
         </tr>)}
