@@ -70,6 +70,8 @@
 .calc-result-age { display: block; margin: 14px 0 8px; color: #fdba74; font-size: 36px; letter-spacing: -1px; }
 .calc-result-age.small { font-size: 24px; }
 .calc-hero .calc-result-sub { margin: 0; color: #d6d3d1; font-size: 14px; line-height: 1.5; word-break: keep-all; }
+/* 저축이 반영됐음을 알리는 한 줄 */
+.calc-hero .calc-result-note { margin: 6px 0 0; color: #fdba74; font-size: 13px; line-height: 1.5; word-break: keep-all; }
 
 .calc-chart { padding: 20px 16px 14px; border: 1px solid #f6e3d3; border-radius: 26px; background: #fff; box-shadow: 0 6px 18px rgba(234, 88, 12, .08); }
 .calc-chart h2 { margin: 0 0 8px; font-size: 18px; }

@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { navigate, ROUTES } from "../routes";
+import { currentFlameInput, fuelTotal } from "../shared/calc/current";
 import { ageAfter, calculateFire, dateAfter } from "../shared/calc/fire";
 import Disclaimer from "../shared/Disclaimer";
 import { useFlameStore } from "../shared/FlameStateContext";
-import { age, duration, eok, ym } from "../shared/format";
+import { age, duration, eok, manwon, ym, ymKey } from "../shared/format";
 import { useCountUp } from "../shared/useCountUp";
 import AssetChart from "./AssetChart";
 import "./calculator.css";
@@ -21,7 +22,9 @@ function AgeCount({ startAge, animMonths, targetMonths }: { startAge: number; an
 
 export default function ResultScreen() {
   const { state } = useFlameStore();
-  const input = state.input;
+  const [today] = useState(() => new Date());
+  // 불꽃 화면과 같은 기준: 자산 = 시작 금액 + 저축 합계, 나이 = 입력 나이 + 입력 이후 경과 개월
+  const input = useMemo(() => currentFlameInput(state, ymKey(today)), [state, today]);
   useEffect(() => { if (!input) navigate(ROUTES.input, { replace: true }); }, [input]);
   const result = useMemo(() => (input ? calculateFire(input) : null), [input]);
   const animMonths = Math.round(useCountUp(result?.monthsToFire ?? 0));
@@ -38,6 +41,7 @@ export default function ResultScreen() {
       <span className="calc-badge">예상 FIRE 나이</span>
       <strong className={`calc-result-age ${m === null ? "small" : ""}`}>{already ? "지금 바로" : m !== null ? <AgeCount startAge={input.age} animMonths={animMonths} targetMonths={m} /> : "100년 이후"}</strong>
       <p className="calc-result-sub">{already ? "이미 FIRE 목표 자산에 도달했어요" : m === null ? "현재 조건으로는 100년 안에 도달하기 어려워요. 월 투자금을 늘리거나 생활비를 조정해 보세요." : `현재 계획을 유지하면 ${ym(dateAfter(m))}에 도달해요`}</p>
+      {state.logs.length > 0 && <p className="calc-result-note">저축 {state.logs.length}번을 더한 지금 자산 {manwon(state.input!.assets + fuelTotal(state))} 기준이에요</p>}
       <dl className="calc-hero-stats">
         <div><dt>목표 FIRE 자산</dt><dd>{eok(Math.round(animTarget / 10_000) * 10_000)}</dd></div>
         <div><dt>남은 기간</dt><dd>{already ? "0개월" : m === null ? "100년+" : duration(animMonths)}</dd></div>
