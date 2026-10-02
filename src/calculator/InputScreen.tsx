@@ -4,7 +4,7 @@ import { currentFlameInput } from "../shared/calc/current";
 import { INVEST_STYLES, WITHDRAWAL_RATE } from "../shared/constants";
 import { useFlameStore } from "../shared/FlameStateContext";
 import { comma, manwon, ymKey } from "../shared/format";
-import { useFireInput, WON_PER_MAN, type FieldKey, type MoneyKey } from "./useFireInput";
+import { useFireInput, WON_PER_MAN, type FieldKey, type MoneyKey, PLACEHOLDERS } from "./useFireInput";
 import "./calculator.css";
 
 /** 투자성향 버튼 장식 이모지 */
@@ -37,7 +37,7 @@ export default function InputScreen() {
     return <div className="calc-field" ref={bind(key)}>
       <label htmlFor={key}><span className="emo" aria-hidden="true">{emoji}</span>{label}</label>
       <div className={`calc-box ${errors[key] ? "error" : ""}`}>
-        <input id={key} inputMode="numeric" value={v === "" ? "" : comma(Number(v))} onChange={(e) => setNumber(key, e.target.value)} aria-invalid={!!errors[key]} aria-describedby={`${key}-msg`} />
+        <input id={key} inputMode="numeric" placeholder={PLACEHOLDERS[key]} value={v === "" ? "" : comma(Number(v))} onChange={(e) => setNumber(key, e.target.value)} aria-invalid={!!errors[key]} aria-describedby={`${key}-msg`} />
         <span>만원</span>
       </div>
       <p id={`${key}-msg`} className={errors[key] ? "calc-error" : "calc-hint"}>{errors[key] ?? [big, extraHint].filter(Boolean).join(" · ")}</p>
@@ -51,7 +51,7 @@ export default function InputScreen() {
       <div className="calc-field" ref={bind("age")}>
         <label htmlFor="age"><span className="emo" aria-hidden="true">🎂</span>현재 나이</label>
         <div className={`calc-box ${errors.age ? "error" : ""}`}>
-          <input id="age" inputMode="numeric" value={draft.age} onChange={(e) => setNumber("age", e.target.value)} aria-invalid={!!errors.age} />
+          <input id="age" inputMode="numeric" placeholder={PLACEHOLDERS.age} value={draft.age} onChange={(e) => setNumber("age", e.target.value)} aria-invalid={!!errors.age} />
           <span>세</span>
         </div>
         {errors.age && <p className="calc-error">{errors.age}</p>}

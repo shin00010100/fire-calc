@@ -46,6 +46,7 @@
 .calc-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px #ffedd5; }
 .calc-box.error { border-color: #dc2626; }
 .calc-box input { flex: 1; min-width: 0; border: 0; outline: none; color: var(--text); background: transparent; font-size: 18px; font-weight: 700; text-align: right; }
+.calc-box input::placeholder { color: #c9bfb5; font-weight: 500; opacity: 1; }
 .calc-box span { margin-left: 6px; color: var(--sub); font-size: 15px; }
 .calc-hint, .calc-error { margin: 6px 2px 0; font-size: 13px; }
 .calc-hint { color: var(--sub); }
