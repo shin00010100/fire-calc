@@ -4,6 +4,7 @@ import { calculateStages, progressToNext } from "../shared/calc/stages";
 import { STAGES } from "../shared/constants";
 import { comma, manwon, percent, ymMonth } from "../shared/format";
 import type { StageIndex } from "../shared/types";
+import Mascot from "../shared/Mascot";
 import { useCountUp } from "../shared/useCountUp";
 import BarFlame from "./BarFlame";
 import FuelBurst from "./FuelBurst";
@@ -64,6 +65,7 @@ export default function FuelScreen() {
     </> : <section className="fl-card fl-outcome" aria-live="polite">
       <FuelBurst stage={outcome.stagedUp ?? stages?.stage ?? 1} />
       <strong className="fl-delta">저축 +{manwon(shownAmount)}</strong>
+      <div className="fl-pai"><Mascot size={52} mood="cheer" /><span>{outcome.stagedUp !== null ? "와, 단계가 올랐어!" : "좋아! 불꽃이 더 커졌어"}</span></div>
       {outcome.target !== null && <div className="fl-progress light">
         <div className="fl-progress-head"><span>{STAGES[outcome.target].fire}까지</span><strong>{percent(outcome.toP)}</strong></div>
         <div className="fl-bar"><div className="grow" style={{ width: `${outcome.toP * 100}%`, "--from": `${outcome.fromP * 100}%` } as CSSProperties} /><BarFlame stage={outcome.target} pct={outcome.toP} from={outcome.fromP} /></div>

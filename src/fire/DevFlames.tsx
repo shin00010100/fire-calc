@@ -1,6 +1,6 @@
 import { STAGE_INDICES, STAGES } from "../shared/constants";
 import BuildingFire from "./BuildingFire";
-import Mascot from "./Mascot";
+import Mascot from "../shared/Mascot";
 import "./fire.css";
 
 /** 개발 전용: stage 0~6을 와이어프레임 보드와 비교 */

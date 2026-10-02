@@ -1,0 +1,18 @@
+/* 마스코트 '파이' */
+.mascot { display: block; overflow: visible; }
+.mascot-body { transform-box: fill-box; transform-origin: 50% 100%; }
+.mascot-outer { transform-box: fill-box; transform-origin: 50% 100%; }
+.mascot-eyes { transform-box: fill-box; transform-origin: 50% 50%; }
+.mascot.animate .mascot-body { animation: mascot-bob 2.4s ease-in-out infinite; }
+.mascot.animate .mascot-outer { animation: mascot-flicker 1.3s ease-in-out infinite; }
+.mascot.animate .mascot-eyes { animation: mascot-blink 4s infinite; }
+.mascot.animate .mascot-shadow { transform-box: fill-box; transform-origin: 50% 50%; animation: mascot-shadow 2.4s ease-in-out infinite; }
+.mascot.cheer.animate .mascot-body { animation-name: mascot-jump; animation-duration: .9s; }
+.mascot.sleepy.animate .mascot-body { animation-duration: 4s; }
+.mascot.sleepy.animate .mascot-outer { animation-duration: 3s; }
+@keyframes mascot-bob { 0%, 100% { transform: translateY(0) scale(1.02, .98); } 50% { transform: translateY(-5px) scale(.98, 1.03); } }
+@keyframes mascot-jump { 0%, 100% { transform: translateY(0) scale(1.06, .92); } 40% { transform: translateY(-16px) scale(.94, 1.08); } 70% { transform: translateY(0) scale(1.04, .95); } }
+@keyframes mascot-flicker { 0%, 100% { transform: scale(1, 1) skewX(0); } 50% { transform: scale(.98, 1.05) skewX(1.5deg); } }
+@keyframes mascot-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes mascot-shadow { 0%, 100% { transform: scale(1); opacity: .12; } 50% { transform: scale(.85); opacity: .07; } }
+@media (prefers-reduced-motion: reduce) { .mascot .mascot-body, .mascot .mascot-outer, .mascot .mascot-eyes, .mascot .mascot-shadow { animation: none !important; } }

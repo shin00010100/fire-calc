@@ -1,4 +1,4 @@
-import "./fire.css";
+import "./mascot.css";
 
 export type MascotMood = "happy" | "cheer" | "sleepy";
 

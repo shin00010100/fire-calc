@@ -16,12 +16,14 @@ const FLAME_TABS: string[] = [ROUTES.flame, ROUTES.fuel, ROUTES.stageUp, ROUTES.
 
 function TabBar({ path }: { path: string }) {
   const { state } = useFlameStore();
+  const onHome = path === ROUTES.main;
   const onFlame = FLAME_TABS.includes(path);
   // 계산기를 한 번도 쓰지 않아 저장된 입력이 없으면 불꽃 화면으로 갈 수 없다
   const noData = !state.input;
   return <nav className="tab-bar" aria-label="하단 탭">
+    <button className={onHome ? "active" : ""} aria-current={onHome ? "page" : undefined} onClick={() => navigate(ROUTES.main)}><span aria-hidden="true">🏠</span>시작</button>
     <button className={onFlame ? "active" : ""} aria-current={path === ROUTES.flame ? "page" : undefined} disabled={noData} aria-disabled={noData} title={noData ? "계산기로 먼저 FIRE 나이를 계산해 주세요" : undefined} onClick={() => navigate(ROUTES.flame)}><span aria-hidden="true"><svg className="tab-flame" viewBox="0 0 24 28"><FlameShape stage={3} /></svg></span>불꽃</button>
-    <button className={onFlame ? "" : "active"} aria-current={path === ROUTES.result || path === ROUTES.input ? "page" : undefined} onClick={() => navigate(state.input ? ROUTES.result : ROUTES.input)}><span aria-hidden="true">🧮</span>계산기</button>
+    <button className={onFlame || onHome ? "" : "active"} aria-current={path === ROUTES.result || path === ROUTES.input ? "page" : undefined} onClick={() => navigate(state.input ? ROUTES.result : ROUTES.input)}><span aria-hidden="true">🧮</span>계산기</button>
   </nav>;
 }
 

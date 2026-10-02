@@ -1,14 +1,14 @@
-// 예외: 메인 로고로 불꽃놀이 그림을 쓰기 위해 fire/의 BuildingFire만 가져온다 (CLAUDE.md §2)
-import BuildingFire from "../fire/BuildingFire";
 import { navigate, ROUTES } from "../routes";
 import { useFlameStore } from "../shared/FlameStateContext";
+import Mascot from "../shared/Mascot";
 import "./calculator.css";
 
 export default function MainScreen() {
   const { state } = useFlameStore();
   return <main className="calc-screen calc-main">
     <div className="calc-hero">
-      <div className="calc-main-art"><BuildingFire stage={6} size={150} label="사무실 위로 폭죽이 터지는 불꽃놀이 그림" /></div>
+      <div className="calc-main-art"><Mascot size={130} /></div>
+      <p className="calc-bubble">안녕, 나는 파이야! 같이 불꽃을 키워 보자</p>
       <h1>자유의 불꽃</h1>
       <p className="calc-tagline">내 FIRE 나이를 계산하고 불꽃을 키워요</p>
       <p className="calc-purpose">경제적 자유(FIRE)에 필요한 목표 자산과 도달 나이를 계산하고, 장작을 넣듯 꾸준히 투자하며 단계별 진행 상황을 확인하는 서비스예요.</p>
