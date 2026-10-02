@@ -26,7 +26,7 @@ export default function AssetChart({ result, startAge }: { result: FireResult; s
   const end = ageAfter(startAge, lastMonth);
   const hp = hover !== null ? series[hover] : null;
   const hoverAge = hp ? ageAfter(startAge, hp.month) : null;
-  const label = fire ? `자산 성장 그래프. 만 ${startAge}세 ${manwon(series[0].assets)}에서 ${age(fire.years, fire.months)}에 목표 ${eok(T)} 도달` : `자산 성장 그래프. 100년 안에 목표 ${eok(T)}에 도달하지 않아요`;
+  const label = fire ? `자산 성장 그래프. 만 ${Math.floor(startAge)}세 ${manwon(series[0].assets)}에서 ${age(fire.years, fire.months)}에 목표 ${eok(T)} 도달` : `자산 성장 그래프. 100년 안에 목표 ${eok(T)}에 도달하지 않아요`;
 
   return <section className="calc-chart">
     <h2><span className="emo" aria-hidden="true">📈</span>자산 성장 그래프</h2>
@@ -44,7 +44,7 @@ export default function AssetChart({ result, startAge }: { result: FireResult; s
         <line x1={x(hp.month)} x2={x(hp.month)} y1={TOP} y2={BOTTOM} className="cursor" />
         <circle cx={x(hp.month)} cy={y(hp.assets)} r="4.5" className="cursor-dot" />
       </g>}
-      <text x={L} y={H - 8} className="axis">만 {startAge}세</text>
+      <text x={L} y={H - 8} className="axis">만 {Math.floor(startAge)}세</text>
       <text x={R} y={H - 8} textAnchor="end" className="axis">만 {end.years}세</text>
     </svg>
     <p className="calc-chart-tip" aria-live="polite">{hp ? <><b>{hoverAge && age(hoverAge.years, hoverAge.months)}</b> 예상 자산 <b>{manwon(hp.assets)}</b></> : "그래프를 누르면 나이별 예상 자산을 보여줘요"}</p>
