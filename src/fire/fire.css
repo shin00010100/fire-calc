@@ -69,7 +69,19 @@
 .fl-rung-bar { height: 6px; margin: -2px 54px 8px 44px; overflow: hidden; border-radius: 3px; background: #f3ece5; }
 .fl-rung-bar div { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ea580c, #fbbf24); }
 .fl-ladder li.current em { color: var(--flame); font-weight: 700; }
-.fl-drop { display: inline-block; flex-shrink: 0; margin: 0 2px; border-radius: 50% 0 50% 50%; transform: rotate(-45deg); }
+.fl-drop { display: inline-block; flex-shrink: 0; margin: 0 2px; transform-origin: 50% 90%; animation: fl-sway 2.6s ease-in-out infinite; }
+.fl-drop svg { display: block; overflow: visible; }
+.fl-ladder li:nth-child(2n) .fl-drop { animation-delay: -.8s; }
+.fl-ladder li:nth-child(3n) .fl-drop { animation-delay: -1.6s; }
+.fl-ladder li.future .fl-drop { opacity: .75; animation-duration: 3.6s; }
+.fl-drop.is-current { animation: fl-bounce 1.2s ease-in-out infinite; }
+.fl-drop-body { transform-origin: 50% 100%; animation: fl-flicker 1.4s ease-in-out infinite; }
+.fl-drop-face { transform-origin: 50% 80%; animation: fl-blink 4s infinite; }
+@keyframes fl-sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg) scale(1.05); } }
+@keyframes fl-bounce { 0%, 100% { transform: translateY(0) scale(1, 1); } 40% { transform: translateY(-4px) scale(.95, 1.08); } 70% { transform: translateY(0) scale(1.08, .92); } }
+@keyframes fl-flicker { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(.96, 1.06); } }
+@keyframes fl-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@media (prefers-reduced-motion: reduce) { .fl-drop, .fl-drop-body, .fl-drop-face { animation: none !important; } }
 /* 24px 원 + 터치 영역 44px */
 .fl-info { position: relative; display: grid; flex-shrink: 0; width: 44px; height: 44px; place-items: center; border: 0; background: none; color: var(--sub); font: italic 700 13px/1 Georgia, serif; cursor: pointer; }
 .fl-info::before { position: absolute; width: 24px; height: 24px; border: 1.5px solid #d6d3d1; border-radius: 50%; content: ""; }

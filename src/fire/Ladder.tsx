@@ -6,8 +6,21 @@ import { age, eok, percent } from "../shared/format";
 import type { StageIndex, StageResult } from "../shared/types";
 import StagePopover from "./StagePopover";
 
-export function FlameDrop({ stage, size = 16 }: { stage: StageIndex; size?: number }) {
-  return <span className="fl-drop" style={{ width: size, height: size, background: `linear-gradient(135deg, ${BF_COL[stage].c}, ${BF_COL[stage].o})` }} aria-hidden="true" />;
+export function FlameDrop({ stage, size = 16, current = false }: { stage: StageIndex; size?: number; current?: boolean }) {
+  const col = BF_COL[stage];
+  return <span className={`fl-drop${current ? " is-current" : ""}`} style={{ width: size, height: size * 1.15 }} aria-hidden="true">
+    <svg viewBox="0 0 24 28" width="100%" height="100%">
+      <path className="fl-drop-body" fill={col.o} d="M12 2C13 7 21 10 21 17C21 22.5 17 26 12 26C7 26 3 22.5 3 17C3 12 6.5 10.5 8 6.5C9 8 9.5 9 10.5 9.5C11.5 7.5 12 5 12 2Z" />
+      <path className="fl-drop-core" fill={col.c} d="M12 13C14.2 15.3 17 17 17 20.5C17 23.3 14.8 25 12 25C9.2 25 7 23.3 7 20.5C7 17 9.8 15.3 12 13Z" />
+      <g className="fl-drop-face">
+        <circle cx="9.6" cy="19.4" r="1.25" fill="#3b1d0e" />
+        <circle cx="14.4" cy="19.4" r="1.25" fill="#3b1d0e" />
+        <circle cx="8.3" cy="21.8" r="1.2" fill="#ff7a90" opacity=".55" />
+        <circle cx="15.7" cy="21.8" r="1.2" fill="#ff7a90" opacity=".55" />
+        <path d="M10.7 21.6Q12 23 13.3 21.6" fill="none" stroke="#3b1d0e" strokeWidth="1" strokeLinecap="round" />
+      </g>
+    </svg>
+  </span>;
 }
 
 export default function Ladder({ stages, ageYears, assets }: { stages: StageResult; ageYears: number; assets: number }) {
@@ -46,7 +59,7 @@ export default function Ladder({ stages, ageYears, assets }: { stages: StageResu
       const progress = achieved || need === 0 ? 1 : Math.min(1, assets / need);
       return <li key={s} className={`${isCurrent ? "current" : ""} ${future ? "future" : ""}`}>
         <div className="fl-rung">
-          <FlameDrop stage={s} size={isCurrent ? 20 : 16} />
+          <FlameDrop stage={s} size={isCurrent ? 26 : 22} current={isCurrent} />
           <div className="fl-rung-text">
             <strong>{m.fire}{ratio > 0 && <i className="fl-pct" aria-label={`목표 자산의 ${pct}`}>{pct}</i>}</strong>
             <span>{m.fireStage}</span>
