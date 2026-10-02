@@ -13,6 +13,9 @@ const ROWS: StageIndex[] = [1, 2, 3, 4, 5, 6];       // 불씨~불꽃놀이
 const A_COLOR = "#2563eb", B_COLOR = "#ea580c";
 const W = 320, H = 276, L = 46, R = 252, TOP = 14, BOT = 238;
 
+/** 그래프 위 단계 불꽃 크기 배율: 불씨 .64 → 불꽃놀이 .84 (높이 약 18px → 24px) */
+const flameScale = (s: StageIndex) => 0.64 + (s - 1) * 0.04;
+
 /** 도달 개월 → "만 49세 4개월" */
 function when(ageYears: number, months: number | null): string {
   if (months === null) return "100년 이후";
@@ -112,7 +115,8 @@ export default function StageChart({ a, b, reachA, reachB }: { a: FireInput; b: 
       </g>
 
       {[...aDots, ...bDots].map((d) => <g key={`${d.color}${d.s}`} transform={`translate(${d.cx.toFixed(1)} ${d.cy.toFixed(1)})`}>
-        <g transform="translate(-8.5 -9.8) scale(.72)"><FlameShape stage={d.s} outline={d.color} /></g>
+        {/* 위 단계일수록 조금씩 크게 (불씨 .64 → 불꽃놀이 .84). 아이콘 중심(약 11.8, 13.6)이 곡선 위 점에 오게 맞춘다 */}
+        <g transform={`translate(${(-11.8 * flameScale(d.s)).toFixed(2)} ${(-13.6 * flameScale(d.s)).toFixed(2)}) scale(${flameScale(d.s).toFixed(2)})`}><FlameShape stage={d.s} outline={d.color} /></g>
       </g>)}
 
       {hover !== null && <g>
