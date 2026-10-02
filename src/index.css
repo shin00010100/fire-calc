@@ -3,6 +3,8 @@
   color: #191f28;
   color-scheme: light;
   background: #ffffff;
+  /* 앱인토스 검수 기준: 확대·축소 금지. 더블탭 확대를 막고 스크롤·탭은 그대로 둔다 (그래프의 pan-y는 그대로 우선) */
+  touch-action: manipulation;
 }
 :root[data-theme="flame"] { background: #fff7ed linear-gradient(180deg, #fff7ed 0%, #ffe8d9 100%) fixed; }
 
