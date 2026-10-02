@@ -1,5 +1,5 @@
 import { Storage as AitStorage } from "@apps-in-toss/web-framework";
-import { currentFlameInput, withTotalAssets } from "./calc/current";
+import { currentFlameInput, withCurrentAge, withTotalAssets } from "./calc/current";
 import { determineStage } from "./calc/stages";
 import { ymKey } from "./format";
 import { emptyState, migrateState } from "./migrate";
@@ -117,6 +117,12 @@ export async function addFuelLog(ym: string, amount: number): Promise<{ prevStag
 /** 총 저축 금액 수정. 직접 고친 값이라 단계가 바뀌어도 축하 화면은 띄우지 않는다 */
 export async function setTotalAssets(total: number): Promise<FlameState> {
   const next = withTotalAssets(await loadState(), total);
+  return write({ ...next, lastSeenStage: flameStage(next, new Date()) });
+}
+
+/** 현재 나이 수정. 저축 기록은 유지하고 지금을 새 기준점으로 삼는다 */
+export async function setCurrentAge(newAge: number): Promise<FlameState> {
+  const next = withCurrentAge(await loadState(), newAge);
   return write({ ...next, lastSeenStage: flameStage(next, new Date()) });
 }
 

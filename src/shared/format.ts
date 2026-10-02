@@ -39,6 +39,9 @@ export const ym = (date: Date) => `${date.getFullYear()}년 ${date.getMonth() + 
 /** 저장용 'YYYY-MM' */
 export const ymKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
+/** 'YYYY-MM' → 10 (월 숫자) */
+export const ymMonth = (ym: string) => Number(ym.slice(5, 7));
+
 /** 2.3시간 / 1일 3시간 */
 export function hours(h: number): string {
   if (h >= 24) return `${Math.floor(h / 24)}일 ${Math.floor(h % 24)}시간`;

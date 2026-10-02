@@ -40,3 +40,9 @@ export function withTotalAssets(state: FlameState, total: number): FlameState {
     ? { ...state, input: { ...state.input, assets: total - fuel } }
     : { ...state, input: { ...state.input, assets: total }, logs: [] };
 }
+
+/** 현재 나이를 직접 맞춘다. 지금을 새 경과 개월 기준점(createdAt)으로 삼아 이 나이부터 다시 흐르게 한다 */
+export function withCurrentAge(state: FlameState, newAge: number): FlameState {
+  if (!state.input) return state;
+  return { ...state, input: { ...state.input, age: newAge }, createdAt: new Date().toISOString() };
+}
