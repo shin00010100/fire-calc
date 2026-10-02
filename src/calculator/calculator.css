@@ -2,7 +2,7 @@
 .calc-screen {
   --accent: #ea580c; --accent-hover: #c2410c; --soft: #fff7ed; --badge-bg: #ffedd5; --badge-text: #9a3412;
   --text: #1c1917; --sub: #57534e; --hint: #a8a29e; --dark: #1c1917; --line: #f0e6dc; --field-line: #e7ddd3;
-  display: flex; flex-direction: column; gap: 16px; min-height: 100vh; padding: 16px 24px 104px; color: var(--text); background: transparent;
+  display: flex; flex-direction: column; gap: 16px; min-height: 100dvh; padding: 16px 24px calc(104px + env(safe-area-inset-bottom)); color: var(--text); background: transparent;
 }
 .calc-title { margin: 8px 0 0; font-size: 24px; letter-spacing: -.5px; }
 
